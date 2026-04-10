@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToClinica;
 use Illuminate\Database\Eloquent\Model;
 
 class VacunaAplicada extends Model
 {
+    use BelongsToClinica;
+    
     protected $table = 'vacuna_aplicadas';
 
     protected $fillable = [

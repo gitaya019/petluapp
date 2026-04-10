@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToClinica;
 use Illuminate\Database\Eloquent\Model;
 
 class Venta extends Model
 {
+    use BelongsToClinica;
+    
     protected $fillable = [
         'clinica_id',
         'usuario_id',

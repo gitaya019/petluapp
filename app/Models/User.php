@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\HasTenants;
+use Filament\Panel;
+use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
     'clinica_id',
@@ -20,7 +23,7 @@ use Illuminate\Notifications\Notifiable;
     'estado'
 ])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements HasTenants
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -43,6 +46,16 @@ class User extends Authenticatable
     public function clinica()
     {
         return $this->belongsTo(Clinica::class);
+    }
+
+    public function getTenants(Panel $panel): array
+    {
+        return $this->clinica ? [$this->clinica] : [];
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->clinica_id === $tenant->id;
     }
 
     public function mascotas()

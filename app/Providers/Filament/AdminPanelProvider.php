@@ -18,6 +18,8 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Models\Clinica;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -28,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->tenant(Clinica::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
