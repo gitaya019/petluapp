@@ -11,6 +11,9 @@ use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
+    use Illuminate\Database\Eloquent\Collection;
+
 
 #[Fillable([
     'clinica_id',
@@ -26,7 +29,7 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Authenticatable implements HasTenants
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * Casts
@@ -48,9 +51,11 @@ class User extends Authenticatable implements HasTenants
         return $this->belongsTo(Clinica::class);
     }
 
-    public function getTenants(Panel $panel): array
+    public function getTenants(Panel $panel): Collection
     {
-        return $this->clinica ? [$this->clinica] : [];
+        return $this->clinica
+            ? new Collection([$this->clinica])
+            : new Collection();
     }
 
     public function canAccessTenant(Model $tenant): bool

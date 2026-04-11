@@ -19,6 +19,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\Clinica;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 
 
 class AdminPanelProvider extends PanelProvider
@@ -30,7 +31,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->tenant(Clinica::class, ownershipRelationship: 'clinica')->colors([
+            ->tenant(Clinica::class)
+            ->colors([
                 'primary' => Color::Amber,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
@@ -53,6 +55,9 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->plugins([
+                FilamentShieldPlugin::make()
             ])
             ->authMiddleware([
                 Authenticate::class,
