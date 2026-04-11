@@ -31,10 +31,6 @@ class UserForm
 
             Toggle::make('estado')
                 ->default(true),
-            //pruebas recordar
-            Select::make('clinica_id')
-                ->relationship('clinica', 'nombre')
-                ->required(),
         ]);
     }
 }

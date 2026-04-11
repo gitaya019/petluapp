@@ -25,13 +25,9 @@ class MascotaForm
 
             Select::make('user_id')
                 ->label('Propietario')
-                ->relationship(
-                    'user',
-                    'name',
-                    fn ($query) =>
-                        $query->where('clinica_id', Filament::getTenant()?->id)
-                )
+                ->relationship('user', 'name')
                 ->searchable()
+                ->preload()
                 ->required(),
 
             TextInput::make('color'),

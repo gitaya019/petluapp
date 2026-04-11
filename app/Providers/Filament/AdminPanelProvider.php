@@ -30,8 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->tenant(Clinica::class)
-            ->colors([
+            ->tenant(Clinica::class, ownershipRelationship: 'clinica')->colors([
                 'primary' => Color::Amber,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')

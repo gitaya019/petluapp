@@ -45,4 +45,9 @@ class ClinicaResource extends Resource
             'edit' => EditClinica::route('/{record}/edit'),
         ];
     }
+
+    public static function isScopedToTenant(): bool
+    {
+        return false;
+    }
 }
