@@ -23,4 +23,9 @@ class CreateClinica extends CreateRecord
         // Sync sin duplicar
         $this->record->users()->sync(array_unique($users));
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

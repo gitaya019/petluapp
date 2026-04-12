@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateVacunaAplicada extends CreateRecord
 {
     protected static string $resource = VacunaAplicadaResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

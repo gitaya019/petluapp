@@ -18,4 +18,9 @@ class CreateUser extends CreateRecord
             $tenant->id
         ]);
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

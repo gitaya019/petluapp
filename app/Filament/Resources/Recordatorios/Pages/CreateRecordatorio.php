@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateRecordatorio extends CreateRecord
 {
     protected static string $resource = RecordatorioResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

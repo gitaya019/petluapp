@@ -30,4 +30,9 @@ class EditClinica extends EditRecord
 
         $this->record->users()->sync(array_unique($users));
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

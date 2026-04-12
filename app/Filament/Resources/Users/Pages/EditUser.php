@@ -26,4 +26,9 @@ class EditUser extends EditRecord
             $tenant->id
         ]);
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

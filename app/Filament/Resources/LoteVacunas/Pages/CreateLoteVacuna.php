@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateLoteVacuna extends CreateRecord
 {
     protected static string $resource = LoteVacunaResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
