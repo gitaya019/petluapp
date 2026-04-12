@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Builder;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+    
+    protected static ?string $tenantOwnershipRelationshipName = 'clinicas';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

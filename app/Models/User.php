@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
@@ -43,19 +44,19 @@ class User extends Authenticatable implements HasTenants
     // 🔗 RELACIONES
     // =========================
 
-    public function clinica()
+    public function clinicas()
     {
-        return $this->belongsTo(Clinica::class);
+        return $this->belongsToMany(Clinica::class);
     }
 
-    public function getTenants(Panel $panel): array
+    public function getTenants(Panel $panel): Collection
     {
-        return $this->clinica ? [$this->clinica] : [];
+        return $this->clinicas()->get();
     }
 
     public function canAccessTenant(Model $tenant): bool
     {
-        return $this->clinica_id === $tenant->id;
+        return $this->clinicas()->whereKey($tenant)->exists();
     }
 
     public function mascotas()
