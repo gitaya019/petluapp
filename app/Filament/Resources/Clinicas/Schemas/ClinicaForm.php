@@ -31,7 +31,7 @@ class ClinicaForm
             Select::make('users')
                 ->label('Usuarios de la clínica')
                 ->multiple()
-                ->relationship('users', 'name')
+                ->relationship('users', 'email')
                 ->searchable()
                 ->preload()
 
