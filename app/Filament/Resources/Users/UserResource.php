@@ -48,10 +48,4 @@ class UserResource extends Resource
         ];
     }
 
-    // 🔥 TENANCY
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->where('clinica_id', Filament::getTenant()->id);
-    }
 }

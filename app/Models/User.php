@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'clinica_id',
     'name',
     'email',
     'numero_documento',
@@ -51,12 +50,12 @@ class User extends Authenticatable implements HasTenants
 
     public function getTenants(Panel $panel): Collection
     {
-        return $this->clinicas()->get();
+        return $this->clinicas;
     }
 
     public function canAccessTenant(Model $tenant): bool
     {
-        return $this->clinicas()->whereKey($tenant)->exists();
+        return $this->clinicas()->whereKey($tenant->id)->exists();
     }
 
     public function mascotas()

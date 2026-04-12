@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Clinicas\Pages;
 use App\Filament\Resources\Clinicas\ClinicaResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
+
 
 class EditClinica extends EditRecord
 {
@@ -15,5 +17,17 @@ class EditClinica extends EditRecord
         return [
             DeleteAction::make(),
         ];
+    }
+
+    protected function afterSave(): void
+    {
+        $user = Auth::user();
+
+        $users = $this->data['users'] ?? [];
+
+        // evitar que se quite a sí mismo (opcional pero recomendado)
+        $users[] = $user->id;
+
+        $this->record->users()->sync(array_unique($users));
     }
 }

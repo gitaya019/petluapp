@@ -17,7 +17,7 @@ class Clinica extends Model implements HasName
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class);
     }
 
     public function mascotas()
