@@ -25,14 +25,16 @@ class VacunaAplicadaForm
                         Select::make('vacuna_id')
                             ->relationship('vacuna', 'nombre')
                             ->required(),
-
                         Select::make('lote_id')
-                            ->relationship('lote', 'numero_lote')
-                            ->required(),
-
-                        Select::make('veterinario_id')
-                            ->relationship('veterinario', 'name')
-                            ->required(),
+                            ->relationship(
+                                'lote',
+                                'numero_lote',
+                                fn($query) => $query->where('stock_actual', '>', 0)
+                            )
+                            ->required()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('Solo se muestran lotes con stock'),
 
                         DatePicker::make('fecha_aplicacion')
                             ->required(),

@@ -26,6 +26,10 @@ class VacunaForm
 
                         TextInput::make('dosis'),
 
+                        TextInput::make('dias_refuerzo')
+                            ->numeric()
+                            ->label('Días para refuerzo'),
+
                         TextInput::make('fabricante'),
 
                         Toggle::make('estado')

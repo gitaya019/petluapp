@@ -33,4 +33,27 @@ class LoteVacuna extends Model
     {
         return $this->belongsTo(Clinica::class);
     }
+
+    public function descontarStock($cantidad = 1)
+    {
+        if ($this->stock_actual < $cantidad) {
+            throw new \Exception('Stock insuficiente');
+        }
+
+        $this->decrement('stock_actual', $cantidad);
+    }
+
+    public function ingresarStock($cantidad)
+    {
+        $this->increment('stock_actual', $cantidad);
+
+        MovimientoStock::create([
+            'clinica_id' => $this->clinica_id,
+            'lote_id' => $this->id,
+            'tipo' => 'entrada',
+            'cantidad' => $cantidad,
+            'motivo' => 'Ingreso de inventario',
+            'fecha' => now(),
+        ]);
+    }
 }

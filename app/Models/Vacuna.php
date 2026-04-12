@@ -10,13 +10,13 @@ class Vacuna extends Model
 
     use BelongsToClinica;
 
-    protected $fillable = ['clinica_id', 'nombre', 'descripcion', 'dosis', 'fabricante', 'estado'];
+    protected $fillable = ['clinica_id', 'nombre', 'descripcion', 'dosis', 'dias_refuerzo', 'fabricante', 'estado'];
 
     public function lotes()
     {
         return $this->hasMany(LoteVacuna::class);
     }
-    
+
     public function clinica()
     {
         return $this->belongsTo(Clinica::class);
