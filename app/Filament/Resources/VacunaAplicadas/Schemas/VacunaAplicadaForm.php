@@ -15,7 +15,7 @@ class VacunaAplicadaForm
         return $schema
             ->components([
                 Section::make('Aplicación de Vacuna')
-                    ->icon('heroicon-o-syringe')
+                    ->icon('heroicon-o-check-badge')
                     ->schema([
                         Select::make('mascota_id')
                             ->relationship('mascota', 'nombre')

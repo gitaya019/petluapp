@@ -14,15 +14,18 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Facades\Filament;
-use Illuminate\Database\Eloquent\Builder; 
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-    
+
     protected static ?string $tenantOwnershipRelationshipName = 'clinicas';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+    protected static string | \UnitEnum | null $navigationGroup = 'Admin';
+
 
     public static function form(Schema $schema): Schema
     {
@@ -47,5 +50,4 @@ class UserResource extends Resource
             'edit' => EditUser::route('/{record}/edit'),
         ];
     }
-
 }

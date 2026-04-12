@@ -18,8 +18,10 @@ class VacunaAplicadaResource extends Resource
 {
     protected static ?string $model = VacunaAplicada::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::CheckBadge;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Veterinaria';
+    
     public static function form(Schema $schema): Schema
     {
         return VacunaAplicadaForm::configure($schema);

@@ -20,6 +20,9 @@ class MovimientoStockResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowsRightLeft;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Inventario';
+
+
     public static function form(Schema $schema): Schema
     {
         return MovimientoStockForm::configure($schema);

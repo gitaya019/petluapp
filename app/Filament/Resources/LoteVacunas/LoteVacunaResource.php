@@ -20,6 +20,8 @@ class LoteVacunaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArchiveBox;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Inventario';
+
     public static function form(Schema $schema): Schema
     {
         return LoteVacunaForm::configure($schema);

@@ -20,6 +20,8 @@ class RecordatorioResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::BellAlert;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Veterinaria';
+
     public static function form(Schema $schema): Schema
     {
         return RecordatorioForm::configure($schema);

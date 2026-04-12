@@ -20,6 +20,8 @@ class VentaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CurrencyDollar;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Finanzas';
+
     public static function form(Schema $schema): Schema
     {
         return VentaForm::configure($schema);

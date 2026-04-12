@@ -21,6 +21,8 @@ class ClinicaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Admin';
+
     public static function form(Schema $schema): Schema
     {
         return ClinicaForm::configure($schema);

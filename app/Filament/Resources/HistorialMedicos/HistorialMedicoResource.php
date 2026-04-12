@@ -20,6 +20,8 @@ class HistorialMedicoResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Veterinaria';
+
     public static function form(Schema $schema): Schema
     {
         return HistorialMedicoForm::configure($schema);
