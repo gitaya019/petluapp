@@ -16,11 +16,10 @@ class MascotasTable
     {
         return $table
             ->columns([
-                TextColumn::make('nombre')->searchable(),
+                TextColumn::make('nombre')->icon('heroicon-o-heart'),
+                TextColumn::make('user.name')->label('Dueño'),
                 TextColumn::make('especie'),
                 TextColumn::make('raza'),
-                TextColumn::make('user.name')->label('Propietario'),
-                TextColumn::make('peso'),
                 IconColumn::make('estado')->boolean(),
             ])
             ->filters([

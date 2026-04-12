@@ -16,4 +16,9 @@ class Vacuna extends Model
     {
         return $this->hasMany(LoteVacuna::class);
     }
+    
+    public function clinica()
+    {
+        return $this->belongsTo(Clinica::class);
+    }
 }

@@ -8,7 +8,7 @@ use App\Models\Traits\BelongsToClinica;
 class HistorialMedico extends Model
 {
     use BelongsToClinica;
-    
+
     protected $fillable = [
         'clinica_id',
         'mascota_id',
@@ -19,4 +19,19 @@ class HistorialMedico extends Model
         'observaciones',
         'fecha'
     ];
+
+    public function mascota()
+    {
+        return $this->belongsTo(Mascota::class);
+    }
+
+    public function veterinario()
+    {
+        return $this->belongsTo(User::class, 'veterinario_id');
+    }
+
+    public function clinica()
+    {
+        return $this->belongsTo(Clinica::class);
+    }
 }

@@ -17,4 +17,14 @@ class MovimientoStock extends Model
         'motivo',
         'fecha'
     ];
+
+    public function lote()
+    {
+        return $this->belongsTo(LoteVacuna::class, 'lote_id');
+    }
+
+    public function clinica()
+    {
+        return $this->belongsTo(Clinica::class);
+    }
 }

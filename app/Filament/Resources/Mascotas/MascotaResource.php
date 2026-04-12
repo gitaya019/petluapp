@@ -21,7 +21,7 @@ class MascotaResource extends Resource
 {
     protected static ?string $model = Mascota::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Heart;
 
     public static function form(Schema $schema): Schema
     {

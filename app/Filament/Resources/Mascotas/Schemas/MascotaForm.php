@@ -8,6 +8,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Select;
 use Filament\Facades\Filament;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\DatePicker;
+
 
 class MascotaForm
 {
@@ -15,28 +18,25 @@ class MascotaForm
     {
         return $schema->components([
 
-            TextInput::make('nombre')
-                ->required(),
+            Section::make('Mascota')
+                ->icon('heroicon-o-heart')
+                ->schema([
+                    Select::make('user_id')
+                        ->relationship('user', 'name')
+                        ->searchable()
+                        ->required(),
 
-            TextInput::make('especie')
-                ->required(),
+                    TextInput::make('nombre')->required(),
+                    TextInput::make('especie')->required(),
+                    TextInput::make('raza'),
 
-            TextInput::make('raza'),
+                    DatePicker::make('fecha_nacimiento'),
+                    TextInput::make('sexo'),
+                    TextInput::make('peso')->numeric(),
+                    TextInput::make('color'),
 
-            Select::make('user_id')
-                ->label('Propietario')
-                ->relationship('user', 'name')
-                ->searchable()
-                ->preload()
-                ->required(),
-
-            TextInput::make('color'),
-
-            TextInput::make('peso')
-                ->numeric(),
-
-            Toggle::make('estado')
-                ->default(true),
+                    Toggle::make('estado')->default(true),
+                ])->columns(2)
         ]);
     }
 }

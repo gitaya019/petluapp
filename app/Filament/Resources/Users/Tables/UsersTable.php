@@ -16,9 +16,9 @@ class UsersTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable(),
+                TextColumn::make('name')->searchable()->icon('heroicon-o-user'),
                 TextColumn::make('email'),
-                TextColumn::make('clinica.nombre')->label('Clínica'),
+                TextColumn::make('telefono'),
                 IconColumn::make('estado')->boolean(),
             ])
             ->filters([

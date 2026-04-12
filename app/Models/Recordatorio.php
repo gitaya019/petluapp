@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Recordatorio extends Model
 {
     use BelongsToClinica;
-    
+
     protected $fillable = [
         'clinica_id',
         'mascota_id',
@@ -17,4 +17,14 @@ class Recordatorio extends Model
         'fecha_programada',
         'estado'
     ];
+
+    public function mascota()
+    {
+        return $this->belongsTo(Mascota::class);
+    }
+
+    public function clinica()
+    {
+        return $this->belongsTo(Clinica::class);
+    }
 }

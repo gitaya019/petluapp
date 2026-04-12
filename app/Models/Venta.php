@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Venta extends Model
 {
     use BelongsToClinica;
-    
+
     protected $fillable = [
         'clinica_id',
         'usuario_id',
@@ -18,8 +18,23 @@ class Venta extends Model
         'fecha'
     ];
 
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(User::class, 'cliente_id');
+    }
+
     public function detalles()
     {
-        return $this->hasMany(DetalleVenta::class);
+        return $this->hasMany(DetalleVenta::class, 'venta_id');
+    }
+
+    public function clinica()
+    {
+        return $this->belongsTo(Clinica::class);
     }
 }

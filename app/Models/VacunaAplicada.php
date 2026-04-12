@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class VacunaAplicada extends Model
 {
     use BelongsToClinica;
-    
+
     protected $table = 'vacuna_aplicadas';
 
     protected $fillable = [
@@ -24,5 +24,25 @@ class VacunaAplicada extends Model
     public function mascota()
     {
         return $this->belongsTo(Mascota::class);
+    }
+
+    public function vacuna()
+    {
+        return $this->belongsTo(Vacuna::class);
+    }
+
+    public function lote()
+    {
+        return $this->belongsTo(LoteVacuna::class, 'lote_id');
+    }
+
+    public function veterinario()
+    {
+        return $this->belongsTo(User::class, 'veterinario_id');
+    }
+
+    public function clinica()
+    {
+        return $this->belongsTo(Clinica::class);
     }
 }

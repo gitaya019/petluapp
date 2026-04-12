@@ -32,6 +32,6 @@ class Mascota extends Model
     }
     public function vacunasAplicadas()
     {
-        return $this->hasMany(VacunaAplicada::class);
+        return $this->hasMany(VacunaAplicada::class, 'mascota_id');
     }
 }

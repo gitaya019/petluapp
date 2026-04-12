@@ -23,4 +23,14 @@ class LoteVacuna extends Model
     {
         return $this->belongsTo(Vacuna::class);
     }
+
+    public function movimientos()
+    {
+        return $this->hasMany(MovimientoStock::class, 'lote_id');
+    }
+
+    public function clinica()
+    {
+        return $this->belongsTo(Clinica::class);
+    }
 }

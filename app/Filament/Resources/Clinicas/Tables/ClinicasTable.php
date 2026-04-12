@@ -16,7 +16,7 @@ class ClinicasTable
     {
         return $table
             ->columns([
-                TextColumn::make('nombre')->searchable(),
+                TextColumn::make('nombre')->searchable()->icon('heroicon-o-building-office'),
                 TextColumn::make('nit'),
                 TextColumn::make('telefono'),
                 IconColumn::make('estado')->boolean(),
