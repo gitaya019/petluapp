@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Select;
 
 class VentasTable
 {
@@ -66,16 +67,31 @@ class VentasTable
                 EditAction::make()
                     ->label('Editar'),
 
-                Action::make('marcar_pagado')
-                    ->label('Pagar')
-                    ->icon('heroicon-o-check-circle')
-                    ->color('success')
-                    ->visible(fn($record) => $record->estado === 'pendiente') // 👈 solo si está pendiente
-                    ->action(function ($record) {
+                Action::make('cambiar_estado')
+                    ->label('Cambiar estado')
+                    ->icon('heroicon-o-pencil-square')
+                    ->color('info')
+
+                    // 🔥 reemplazo de form() → schema()
+                    ->schema([
+                        Select::make('estado')
+                            ->label('Estado')
+                            ->options([
+                                'pendiente' => 'Pendiente',
+                                'pagado' => 'Pagado',
+                                'cancelado' => 'Cancelado',
+                            ])
+                            ->required(),
+                    ])
+
+                    // 🔥 confirmación antes de ejecutar
+                    ->requiresConfirmation()
+
+                    ->action(function ($record, array $data) {
                         $record->update([
-                            'estado' => 'pagado',
+                            'estado' => $data['estado'],
                         ]);
-                    }),
+                    })
             ])
 
             ->toolbarActions([
