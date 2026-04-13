@@ -23,7 +23,7 @@ class VacunaAplicada extends Model
     ];
 
     protected $casts = [
-        'fecha_aplicacion' => 'datetime', // 🔥 CLAVE
+        'fecha_aplicacion' => 'datetime',
     ];
 
     // =========================
@@ -65,9 +65,28 @@ class VacunaAplicada extends Model
             ->where('vacuna_id', $vacunaId);
     }
 
-    public static function totalAplicadas($mascotaId, $vacunaId)
+    public static function esquemaDosis($mascotaId, $vacunaId)
     {
-        return self::porMascotaVacuna($mascotaId, $vacunaId)->count();
+        $vacuna = Vacuna::find($vacunaId);
+
+        if (!$vacuna) {
+            return [0, 1];
+        }
+
+        $dosisBase = $vacuna->dosis ?? 1;
+
+        $aplicadas = self::porMascotaVacuna($mascotaId, $vacunaId)->count();
+
+        if ($aplicadas == 0) {
+            return [0, $dosisBase];
+        }
+
+        // 🔥 calcular ciclo actual
+        $ciclos = ceil($aplicadas / $dosisBase);
+
+        $totalEsperado = $ciclos * $dosisBase;
+
+        return [$aplicadas, $totalEsperado];
     }
 
     public static function ultimaAplicacion($mascotaId, $vacunaId)
@@ -87,61 +106,121 @@ class VacunaAplicada extends Model
 
         $dias = $ultima->vacuna->dias_refuerzo ?? 0;
 
-        return $ultima->fecha_aplicacion->addDays($dias);
+        return $ultima->fecha_aplicacion->copy()->addDays($dias);
+    }
+
+    // =========================
+    // ✅ VALIDACIÓN CENTRAL
+    // =========================
+
+    public static function validarAplicacion($model)
+    {
+        $lote = $model->lote;
+
+        if (!$lote) {
+            return 'Debe seleccionar un lote válido';
+        }
+
+        if ($lote->stock_actual <= 0) {
+            return 'No hay stock disponible en este lote';
+        }
+
+        $dosisMax = $model->vacuna->dosis ?? 1;
+
+        $aplicadas = self::esquemaDosis(
+            $model->mascota_id,
+            $model->vacuna_id
+        );
+
+        // 🔴 ya inició pero no terminó
+        if ($aplicadas > 0 && $aplicadas < $dosisMax) {
+            return 'Esta vacuna ya está en proceso. Use "Aplicar dosis".';
+        }
+
+        // 🔴 ya completó → validar refuerzo
+        if ($aplicadas >= $dosisMax) {
+
+            $ultima = self::ultimaAplicacion(
+                $model->mascota_id,
+                $model->vacuna_id
+            );
+
+            if (!$ultima) {
+                return 'Error en historial de vacuna';
+            }
+
+            $dias = $model->vacuna->dias_refuerzo ?? 0;
+            $proxima = $ultima->fecha_aplicacion->copy()->addDays($dias);
+
+            if (now()->lt($proxima)) {
+                return 'Vacuna completa. Próximo refuerzo: ' . $proxima->format('Y-m-d');
+            }
+        }
+
+        return null; // ✅ OK
     }
 
     // =========================
     // ⚙️ EVENTOS AUTOMÁTICOS
     // =========================
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
 
-protected static function booted()
-{
-    static::creating(function ($model) {
+            // 🔥 AUTO veterinario
+            if (!$model->veterinario_id) {
+                $model->veterinario_id = Auth::id();
+            }
 
-        // 🔥 ASIGNAR VETERINARIO AUTOMÁTICAMENTE
-        if (!$model->veterinario_id) {
-            $model->veterinario_id = Auth::id();
-        }
+            // ❌ YA NO VALIDAMOS AQUÍ (IMPORTANTE)
+        });
 
-        $lote = $model->lote;
+        static::created(function ($model) {
 
-        if (!$lote) {
-            throw new \Exception('Debe seleccionar un lote válido');
-        }
+            $lote = $model->lote;
+            $vacuna = $model->vacuna;
+            $user = Auth::user();
 
-        if ($lote->stock_actual <= 0) {
-            throw new \Exception('No hay stock disponible en este lote');
-        }
+            // =========================
+            // 📦 STOCK
+            // =========================
+            $lote->descontarStock(1);
 
-        $dosisMax = $model->vacuna->dosis ?? 1;
+            MovimientoStock::create([
+                'clinica_id' => $model->clinica_id,
+                'lote_id' => $lote->id,
+                'tipo' => 'salida',
+                'cantidad' => 1,
+                'motivo' => 'Aplicación de vacuna',
+                'fecha' => now(),
+            ]);
 
-        $aplicadas = self::totalAplicadas(
-            $model->mascota_id,
-            $model->vacuna_id
-        );
+            // =========================
+            // 💰 CREAR VENTA
+            // =========================
+            $precio = $vacuna->precio_dosis ?? 0;
 
-        if ($aplicadas >= $dosisMax) {
-            throw new \Exception('La mascota ya completó las dosis');
-        }
-    });
+            $venta = \App\Models\Venta::create([
+                'clinica_id' => $model->clinica_id,
+                'usuario_id' => $user?->id,
+                'cliente_id' => $model->mascota?->user_id,
+                'total' => $precio,
+                'estado' => 'pendiente',
+                'fecha' => now(),
+            ]);
 
-    static::created(function ($model) {
-
-        $lote = $model->lote;
-
-        // ✅ usar método del modelo
-        $lote->descontarStock(1);
-
-        MovimientoStock::create([
-            'clinica_id' => $model->clinica_id,
-            'lote_id' => $lote->id,
-            'tipo' => 'salida',
-            'cantidad' => 1,
-            'motivo' => 'Aplicación de vacuna',
-            'fecha' => now(),
-        ]);
-    });
-
+            // =========================
+            // 📄 DETALLE VENTA
+            // =========================
+            \App\Models\DetalleVenta::create([
+                'venta_id' => $venta->id,
+                'tipo_item' => 'vacuna',
+                'descripcion' => $vacuna->nombre,
+                'precio' => $precio,
+                'cantidad' => 1,
+                'subtotal' => $precio,
+            ]);
+        });
     }
 }

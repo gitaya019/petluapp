@@ -15,7 +15,7 @@ class VacunasTable
     {
         return $table
             ->Columns([
-                TextColumn::make('nombre')->searchable()->sortable(), 
+                TextColumn::make('nombre')->searchable()->sortable(),
 
                 TextColumn::make('dosis'),
 
@@ -24,9 +24,13 @@ class VacunasTable
                 IconColumn::make('estado')
                     ->boolean(),
 
+                TextColumn::make('precio_dosis')->money('COP'),
+
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->label('Creado'),
+
             ])
             ->filters([
                 //

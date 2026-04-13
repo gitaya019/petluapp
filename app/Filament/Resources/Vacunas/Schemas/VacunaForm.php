@@ -32,6 +32,8 @@ class VacunaForm
 
                         TextInput::make('fabricante'),
 
+                        TextInput::make('precio_dosis'),
+
                         Toggle::make('estado')
                             ->default(true),
                     ])->columns(2),

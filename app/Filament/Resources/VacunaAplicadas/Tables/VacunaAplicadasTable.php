@@ -35,25 +35,20 @@ class VacunaAplicadasTable
                 TextColumn::make('dosis')
                     ->label('Dosis')
                     ->getStateUsing(function ($record) {
-
-                        $aplicadas = VacunaAplicada::totalAplicadas(
+                        [$aplicadas, $total] = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
-
-                        $total = $record->vacuna->dosis ?? 1;
 
                         return "{$aplicadas} / {$total}";
                     })
                     ->badge()
                     ->color(function ($record) {
 
-                        $aplicadas = VacunaAplicada::totalAplicadas(
+                        [$aplicadas, $total] = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
-
-                        $total = $record->vacuna->dosis ?? 1;
 
                         return $aplicadas >= $total ? 'success' : 'warning';
                     }),
@@ -68,7 +63,7 @@ class VacunaAplicadasTable
                             $record->vacuna_id
                         );
 
-                        return $ultima?->fecha_aplicacion?->format('Y-m-d') ?? 'Sin aplicar';
+                        return $ultima?->fecha_aplicacion?->format('d-m-Y') ?? 'Sin aplicar';
                     }),
 
                 // 🔴 PRÓXIMA DOSIS
@@ -76,14 +71,11 @@ class VacunaAplicadasTable
                     ->label('Próxima dosis')
                     ->getStateUsing(function ($record) {
 
-                        $aplicadas = VacunaAplicada::totalAplicadas(
+                        [$aplicadas, $total] = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
 
-                        $total = $record->vacuna->dosis ?? 1;
-
-                        // ✅ SI YA COMPLETÓ
                         if ($aplicadas >= $total) {
                             return 'Completado';
                         }
@@ -93,12 +85,12 @@ class VacunaAplicadasTable
                             $record->vacuna_id
                         );
 
-                        return $fecha?->format('Y-m-d');
+                        return $fecha?->format('d-m-Y');
                     })
                     ->badge()
                     ->color(function ($record) {
 
-                        $aplicadas = VacunaAplicada::totalAplicadas(
+                        $aplicadas = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
@@ -135,26 +127,38 @@ class VacunaAplicadasTable
                 Action::make('aplicar_dosis')
                     ->label(function ($record) {
 
-                        $aplicadas = VacunaAplicada::totalAplicadas(
+                        $aplicadas = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
 
                         $total = $record->vacuna->dosis ?? 1;
 
-                        return ($aplicadas + 1 >= $total)
-                            ? 'Aplicar última dosis'
-                            : 'Aplicar siguiente dosis';
+                        // 🟢 Última dosis del ciclo
+                        if ($aplicadas + 1 == $total) {
+                            return 'Aplicar última dosis';
+                        }
+
+                        // 🔁 Nuevo ciclo (refuerzo)
+                        if ($aplicadas >= $total) {
+                            return 'Aplicar refuerzo';
+                        }
+
+                        return 'Aplicar siguiente dosis';
                     })
                     ->icon('heroicon-o-check-badge')
                     ->color(function ($record) {
 
-                        $aplicadas = VacunaAplicada::totalAplicadas(
+                        $aplicadas = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
 
                         $total = $record->vacuna->dosis ?? 1;
+
+                        if ($aplicadas >= $total) {
+                            return 'success'; // refuerzo
+                        }
 
                         return ($aplicadas + 1 >= $total)
                             ? 'success'
@@ -162,14 +166,33 @@ class VacunaAplicadasTable
                     })
                     ->visible(function ($record) {
 
-                        $aplicadas = VacunaAplicada::totalAplicadas(
+                        $aplicadas = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
 
                         $total = $record->vacuna->dosis ?? 1;
 
-                        return $aplicadas < $total;
+                        // 🟢 Aún faltan dosis
+                        if ($aplicadas < $total) {
+                            return true;
+                        }
+
+                        // 🔁 Ya completó → validar refuerzo
+                        $ultima = VacunaAplicada::ultimaAplicacion(
+                            $record->mascota_id,
+                            $record->vacuna_id
+                        );
+
+                        if (!$ultima) {
+                            return false;
+                        }
+
+                        $dias = $record->vacuna->dias_refuerzo ?? 0;
+
+                        $proxima = $ultima->fecha_aplicacion->copy()->addDays($dias);
+
+                        return now()->greaterThanOrEqualTo($proxima);
                     })
                     ->requiresConfirmation()
                     ->action(function ($record) {

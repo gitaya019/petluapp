@@ -10,7 +10,7 @@ class Vacuna extends Model
 
     use BelongsToClinica;
 
-    protected $fillable = ['clinica_id', 'nombre', 'descripcion', 'dosis', 'dias_refuerzo', 'fabricante', 'estado'];
+    protected $fillable = ['clinica_id', 'nombre', 'descripcion', 'dosis', 'dias_refuerzo', 'fabricante', 'estado', 'precio_dosis'];
 
     public function lotes()
     {
