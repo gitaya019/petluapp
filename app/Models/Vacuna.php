@@ -21,4 +21,5 @@ class Vacuna extends Model
     {
         return $this->belongsTo(Clinica::class);
     }
+
 }

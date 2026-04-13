@@ -27,4 +27,27 @@ class MovimientoStock extends Model
     {
         return $this->belongsTo(Clinica::class);
     }
+
+
+    protected static function booted()
+    {
+        static::created(function ($movimiento) {
+
+            $lote = $movimiento->lote;
+
+            if (!$lote) return;
+
+            if ($movimiento->tipo === 'entrada') {
+                $lote->increment('stock_actual', $movimiento->cantidad);
+            }
+
+            if ($movimiento->tipo === 'salida') {
+                $lote->decrement('stock_actual', $movimiento->cantidad);
+            }
+
+            // 🔥 ahora sí existe
+            $lote->refresh();
+            $lote->actualizarEstadoVacuna();
+        });
+    }
 }

@@ -21,11 +21,29 @@ class LoteVacunasTable
 
                 TextColumn::make('numero_lote'),
 
-                TextColumn::make('fecha_vencimiento')->date(),
+                TextColumn::make('fecha_vencimiento')
+                    ->date('d M Y')
+                    ->color(function ($record) {
+                        if (now()->greaterThan($record->fecha_vencimiento)) {
+                            return 'danger'; // vencido
+                        }
 
+                        if (now()->addDays(30)->greaterThan($record->fecha_vencimiento)) {
+                            return 'warning'; // por vencer
+                        }
+
+                        return 'success';
+                    }),
                 TextColumn::make('stock_inicial'),
 
-                TextColumn::make('stock_actual'),
+                TextColumn::make('stock_actual')
+                    ->label('Stock')
+                    ->badge()
+                    ->color(fn($state) => match (true) {
+                        $state == 0 => 'danger',     // 🔴 agotado
+                        $state <= 5 => 'warning',    // 🟡 bajo
+                        default => 'success',        // 🟢 normal
+                    }),
             ])
             ->filters([
                 //

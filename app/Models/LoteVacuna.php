@@ -41,6 +41,12 @@ class LoteVacuna extends Model
         }
 
         $this->decrement('stock_actual', $cantidad);
+
+        // 🔥 recargar modelo actualizado
+        $this->refresh();
+
+        // 🔥 actualizar estado de vacuna
+        $this->actualizarEstadoVacuna();
     }
 
     public function ingresarStock($cantidad)
@@ -55,5 +61,42 @@ class LoteVacuna extends Model
             'motivo' => 'Ingreso de inventario',
             'fecha' => now(),
         ]);
+    }
+
+    protected static function booted()
+    {
+        static::saved(function ($lote) {
+
+            $vacuna = $lote->vacuna;
+
+            if (!$vacuna) return;
+
+            // 🔥 verificar si algún lote tiene stock
+            $tieneStock = $vacuna->lotes()
+                ->where('stock_actual', '>', 0)
+                ->exists();
+
+            // 🟢 activar / 🔴 desactivar vacuna
+            $vacuna->update([
+                'estado' => $tieneStock
+            ]);
+        });
+    }
+
+    public function actualizarEstadoVacuna()
+    {
+        $vacuna = $this->vacuna;
+
+        if (!$vacuna) return;
+
+        $tieneStock = $vacuna->lotes()
+            ->where('stock_actual', '>', 0)
+            ->exists();
+
+        if ($vacuna->estado !== $tieneStock) {
+            $vacuna->update([
+                'estado' => $tieneStock
+            ]);
+        }
     }
 }

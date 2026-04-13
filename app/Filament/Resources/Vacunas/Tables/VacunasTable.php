@@ -14,30 +14,66 @@ class VacunasTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->Columns([
-                TextColumn::make('nombre')->searchable()->sortable(),
+            ->columns([
 
-                TextColumn::make('dosis'),
+                // 💉 NOMBRE
+                TextColumn::make('nombre')
+                    ->label('Vacuna')
+                    ->icon('heroicon-o-beaker')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold'),
 
-                TextColumn::make('fabricante'),
+                // 🔢 DOSIS
+                TextColumn::make('dosis')
+                    ->label('Dosis')
+                    ->badge()
+                    ->color('info'),
 
+                // 🏭 FABRICANTE
+                TextColumn::make('fabricante')
+                    ->label('Fabricante')
+                    ->icon('heroicon-o-building-office')
+                    ->searchable()
+                    ->toggleable(),
+
+                // 💰 PRECIO
+                TextColumn::make('precio_dosis')
+                    ->label('Precio')
+                    ->money('COP', true)
+                    ->color('success')
+                    ->weight('bold')
+                    ->sortable(),
+
+                // 🟢 ESTADO
                 IconColumn::make('estado')
-                    ->boolean(),
+                    ->label('Activo')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger'),
 
-                TextColumn::make('precio_dosis')->money('COP'),
-
-
+                // 📅 FECHA
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->label('Creado'),
-
+                    ->label('Creado')
+                    ->dateTime('d M Y')
+                    ->since() // 🔥 hace X tiempo
+                    ->color('gray')
+                    ->toggleable(),
             ])
+
+            ->defaultSort('created_at', 'desc')
+
             ->filters([
                 //
             ])
+
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->label('Editar'),
             ])
+
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
