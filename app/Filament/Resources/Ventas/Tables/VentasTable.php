@@ -48,13 +48,6 @@ class VentasTable
                         default => 'gray',
                     }),
 
-                // 📅 FECHA
-                TextColumn::make('fecha')
-                    ->label('Fecha')
-                    ->dateTime('d M Y - H:i')
-                    ->sortable()
-                    ->color('gray'),
-
                 // ⏱️ HACE CUÁNTO
                 TextColumn::make('created_at')
                     ->label('Hace')
@@ -62,7 +55,7 @@ class VentasTable
                     ->color('gray'),
             ])
 
-            ->defaultSort('fecha', 'desc') // 🔥 más reciente arriba
+            ->defaultSort('created_at', 'desc') // 🔥 más reciente arriba
 
             ->filters([
                 //

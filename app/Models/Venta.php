@@ -15,7 +15,6 @@ class Venta extends Model
         'cliente_id',
         'total',
         'estado',
-        'fecha'
     ];
 
     public function usuario()
