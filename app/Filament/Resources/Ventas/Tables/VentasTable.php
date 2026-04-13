@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Actions\Action;
 
 class VentasTable
 {
@@ -64,6 +65,17 @@ class VentasTable
             ->recordActions([
                 EditAction::make()
                     ->label('Editar'),
+
+                Action::make('marcar_pagado')
+                    ->label('Pagar')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn($record) => $record->estado === 'pendiente') // 👈 solo si está pendiente
+                    ->action(function ($record) {
+                        $record->update([
+                            'estado' => 'pagado',
+                        ]);
+                    }),
             ])
 
             ->toolbarActions([
