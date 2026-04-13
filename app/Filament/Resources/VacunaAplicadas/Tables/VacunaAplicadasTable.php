@@ -90,12 +90,10 @@ class VacunaAplicadasTable
                     ->badge()
                     ->color(function ($record) {
 
-                        $aplicadas = VacunaAplicada::esquemaDosis(
+                        [$aplicadas, $total] = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
-
-                        $total = $record->vacuna->dosis ?? 1;
 
                         // 🟢 COMPLETADO
                         if ($aplicadas >= $total) {
@@ -127,12 +125,10 @@ class VacunaAplicadasTable
                 Action::make('aplicar_dosis')
                     ->label(function ($record) {
 
-                        $aplicadas = VacunaAplicada::esquemaDosis(
+                        [$aplicadas, $total] = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
-
-                        $total = $record->vacuna->dosis ?? 1;
 
                         // 🟢 Última dosis del ciclo
                         if ($aplicadas + 1 == $total) {
@@ -149,12 +145,10 @@ class VacunaAplicadasTable
                     ->icon('heroicon-o-check-badge')
                     ->color(function ($record) {
 
-                        $aplicadas = VacunaAplicada::esquemaDosis(
+                        [$aplicadas, $total] = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
-
-                        $total = $record->vacuna->dosis ?? 1;
 
                         if ($aplicadas >= $total) {
                             return 'success'; // refuerzo
@@ -166,12 +160,10 @@ class VacunaAplicadasTable
                     })
                     ->visible(function ($record) {
 
-                        $aplicadas = VacunaAplicada::esquemaDosis(
+                        [$aplicadas, $total] = VacunaAplicada::esquemaDosis(
                             $record->mascota_id,
                             $record->vacuna_id
                         );
-
-                        $total = $record->vacuna->dosis ?? 1;
 
                         // 🟢 Aún faltan dosis
                         if ($aplicadas < $total) {
