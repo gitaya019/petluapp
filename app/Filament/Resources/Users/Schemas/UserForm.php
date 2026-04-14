@@ -8,7 +8,8 @@ use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Facades\Filament;
-use Spatie\Permission\Models\Role;
+use Illuminate\Database\Eloquent\Model;
+
 
 class UserForm
 {
@@ -38,15 +39,27 @@ class UserForm
 
                     Select::make('roles')
                         ->label('Roles')
-                        ->multiple()
                         ->relationship(
                             name: 'roles',
                             titleAttribute: 'name',
                             modifyQueryUsing: fn($query) =>
                             $query->where('roles.clinica_id', Filament::getTenant()?->id)
                         )
+                        ->saveRelationshipsUsing(function (Model $record, $state) {
+
+                            // 🔥 SETEAR TENANT (CLAVE)
+                            app(\Spatie\Permission\PermissionRegistrar::class)
+                                ->setPermissionsTeamId(Filament::getTenant()?->id);
+
+                            // 🔥 GUARDAR CON clinica_id
+                            $record->roles()->syncWithPivotValues(
+                                $state,
+                                [config('permission.column_names.team_foreign_key') => Filament::getTenant()?->id]
+                            );
+                        })
+                        ->multiple()
                         ->preload()
-                        ->searchable(),
+                        ->searchable()
                 ])->columns(2),
         ]);
     }

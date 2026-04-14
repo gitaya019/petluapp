@@ -51,32 +51,4 @@ class UserResource extends Resource
             'edit' => EditUser::route('/{record}/edit'),
         ];
     }
-
-    public static function mutateFormDataBeforeCreate(array $data): array
-    {
-        if (Filament::getTenant()) {
-            app(PermissionRegistrar::class)
-                ->setPermissionsTeamId(Filament::getTenant()->id);
-        }
-
-        return $data;
-    }
-
-    public static function mutateFormDataBeforeSave(array $data): array
-    {
-        if (Filament::getTenant()) {
-            app(PermissionRegistrar::class)
-                ->setPermissionsTeamId(Filament::getTenant()->id);
-        }
-
-        return $data;
-    }
-
-    public static function afterSave($record): void
-    {
-        if (Filament::getTenant()) {
-            app(PermissionRegistrar::class)
-                ->setPermissionsTeamId(Filament::getTenant()->id);
-        }
-    }
 }
