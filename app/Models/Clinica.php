@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\HasName;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Clinica extends Model implements HasName
 {
+    use SoftDeletes;
     protected $fillable = ['nombre','nit','direccion','telefono','email','estado'];
 
     public function getFilamentName(): string

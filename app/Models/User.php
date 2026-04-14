@@ -12,6 +12,7 @@ use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
     'name',
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Authenticatable implements HasTenants
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * Casts

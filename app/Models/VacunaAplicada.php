@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Models\Traits\BelongsToClinica;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class VacunaAplicada extends Model
 {
-    use BelongsToClinica;
+    use BelongsToClinica, SoftDeletes;
 
     protected $table = 'vacuna_aplicadas';
 

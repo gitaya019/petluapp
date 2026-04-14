@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\BelongsToClinica;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HistorialMedico extends Model
 {
-    use BelongsToClinica;
+    use BelongsToClinica, SoftDeletes;
 
     protected $fillable = [
         'clinica_id',
