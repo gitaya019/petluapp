@@ -7,6 +7,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Facades\Filament;
+use Spatie\Permission\Models\Role;
 
 class UserForm
 {
@@ -33,6 +35,18 @@ class UserForm
 
                     TextInput::make('telefono'),
                     Toggle::make('estado')->default(true),
+
+                    Select::make('roles')
+                        ->label('Roles')
+                        ->multiple()
+                        ->relationship(
+                            name: 'roles',
+                            titleAttribute: 'name',
+                            modifyQueryUsing: fn($query) =>
+                            $query->where('roles.clinica_id', Filament::getTenant()?->id)
+                        )
+                        ->preload()
+                        ->searchable(),
                 ])->columns(2),
         ]);
     }

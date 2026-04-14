@@ -13,8 +13,9 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\Permission\PermissionRegistrar;
+use Filament\Facades\Filament;
 
 class UserResource extends Resource
 {
@@ -49,5 +50,33 @@ class UserResource extends Resource
             'create' => CreateUser::route('/create'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        if (Filament::getTenant()) {
+            app(PermissionRegistrar::class)
+                ->setPermissionsTeamId(Filament::getTenant()->id);
+        }
+
+        return $data;
+    }
+
+    public static function mutateFormDataBeforeSave(array $data): array
+    {
+        if (Filament::getTenant()) {
+            app(PermissionRegistrar::class)
+                ->setPermissionsTeamId(Filament::getTenant()->id);
+        }
+
+        return $data;
+    }
+
+    public static function afterSave($record): void
+    {
+        if (Filament::getTenant()) {
+            app(PermissionRegistrar::class)
+                ->setPermissionsTeamId(Filament::getTenant()->id);
+        }
     }
 }

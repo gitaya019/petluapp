@@ -19,6 +19,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\Clinica;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+
 
 
 class AdminPanelProvider extends PanelProvider
@@ -43,6 +45,12 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
+            ])
+            ->plugins([
+                FilamentShieldPlugin::make()
+                    ->navigationGroup('Seguridad') // opcional
+                    ->navigationIcon('heroicon-o-shield-check')
+                    ->scopeToTenant(true) 
             ])
             ->middleware([
                 EncryptCookies::class,
