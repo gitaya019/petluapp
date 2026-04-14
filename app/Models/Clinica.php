@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Clinica extends Model implements HasName
 {
     use SoftDeletes;
-    protected $fillable = ['nombre','nit','direccion','telefono','email','estado'];
+    protected $fillable = ['nombre', 'nit', 'direccion', 'telefono', 'email', 'estado'];
 
     public function getFilamentName(): string
     {
