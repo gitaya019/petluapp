@@ -9,6 +9,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserForm
@@ -23,8 +24,13 @@ class UserForm
                     TextInput::make('email')->email()->required(),
                     TextInput::make('password')
                         ->password()
-                        ->dehydrateStateUsing(fn($state) => bcrypt($state))
-                        ->required(fn(string $operation) => $operation === 'create'),
+                        ->dehydrateStateUsing(
+                            fn($state) =>
+                            filled($state) ? Hash::make($state) : null
+                        )
+                        ->dehydrated(fn($state) => filled($state))
+                        ->required(fn(string $operation) => $operation === 'create')
+                        ->helperText('Déjalo vacío si no deseas cambiar la contraseña'),
 
                     TextInput::make('numero_documento'),
                     Select::make('tipo_documento')
