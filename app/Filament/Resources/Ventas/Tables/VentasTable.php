@@ -8,7 +8,12 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Filters\TrashedFilter;
+
 
 class VentasTable
 {
@@ -60,12 +65,16 @@ class VentasTable
             ->defaultSort('created_at', 'desc') // 🔥 más reciente arriba
 
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
 
             ->recordActions([
                 EditAction::make()
                     ->label('Editar'),
+
+                DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
 
                 Action::make('cambiar_estado')
                     ->label('Cambiar estado')

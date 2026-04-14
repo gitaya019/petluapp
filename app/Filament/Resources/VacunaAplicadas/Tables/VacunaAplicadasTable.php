@@ -10,6 +10,10 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 
 class VacunaAplicadasTable
 {
@@ -116,11 +120,14 @@ class VacunaAplicadasTable
             ])
 
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
 
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
 
                 Action::make('aplicar_dosis')
                     ->label(function ($record) {
