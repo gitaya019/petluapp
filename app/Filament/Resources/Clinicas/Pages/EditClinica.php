@@ -6,7 +6,7 @@ use App\Filament\Resources\Clinicas\ClinicaResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Auth;
-
+use Filament\Pages\Dashboard;
 
 class EditClinica extends EditRecord
 {
@@ -14,9 +14,7 @@ class EditClinica extends EditRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            DeleteAction::make(),
-        ];
+        return [];
     }
 
     protected function afterSave(): void
@@ -33,6 +31,6 @@ class EditClinica extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return $this->getResource()::getUrl('index');
+        return Dashboard::getUrl();
     }
 }

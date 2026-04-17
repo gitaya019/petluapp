@@ -13,6 +13,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Filament\Facades\Filament;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class ClinicaResource extends Resource
@@ -44,7 +46,6 @@ class ClinicaResource extends Resource
     {
         return [
             'index' => ListClinicas::route('/'),
-            'create' => CreateClinica::route('/create'),
             'edit' => EditClinica::route('/{record}/edit'),
         ];
     }
@@ -53,4 +54,26 @@ class ClinicaResource extends Resource
     {
         return false;
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('id', Filament::getTenant()?->id);
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return $record->id !== Filament::getTenant()?->id;
+    }
+
+    public static function canEdit($record): bool
+    {
+        return $record->id === Filament::getTenant()?->id;
+    }
+
 }

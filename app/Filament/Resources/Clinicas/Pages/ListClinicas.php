@@ -3,17 +3,24 @@
 namespace App\Filament\Resources\Clinicas\Pages;
 
 use App\Filament\Resources\Clinicas\ClinicaResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Facades\Filament;
 
 class ListClinicas extends ListRecords
 {
     protected static string $resource = ClinicaResource::class;
 
-    protected function getHeaderActions(): array
+    public function mount(): void
     {
-        return [
-            CreateAction::make(),
-        ];
+        parent::mount();
+
+        $tenantId = Filament::getTenant()?->id;
+
+        if ($tenantId) {
+            redirect()->to(
+                ClinicaResource::getUrl('edit', ['record' => $tenantId])
+            );
+        }
     }
+
 }
