@@ -23,19 +23,10 @@ class UserForm
                     TextInput::make('name')->required(),
                     TextInput::make('email')->email()->required(),
                     TextInput::make('password')
+                        ->label('Contraseña')
                         ->password()
-                        ->dehydrateStateUsing(
-                            fn($state) =>
-                            filled($state) ? Hash::make($state) : null
-                        )
-                        ->dehydrated(fn($state) => filled($state))
                         ->required(fn(string $operation) => $operation === 'create')
-                        ->helperText(
-                            fn(string $operation) =>
-                            $operation === 'edit'
-                                ? 'Déjalo vacío si no deseas cambiar la contraseña'
-                                : null
-                        ),
+                        ->hidden(fn(string $operation) => $operation === 'edit'),
                     TextInput::make('numero_documento'),
                     Select::make('tipo_documento')
                         ->options([
