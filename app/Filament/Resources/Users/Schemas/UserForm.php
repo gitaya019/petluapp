@@ -30,8 +30,12 @@ class UserForm
                         )
                         ->dehydrated(fn($state) => filled($state))
                         ->required(fn(string $operation) => $operation === 'create')
-                        ->helperText('Déjalo vacío si no deseas cambiar la contraseña'),
-
+                        ->helperText(
+                            fn(string $operation) =>
+                            $operation === 'edit'
+                                ? 'Déjalo vacío si no deseas cambiar la contraseña'
+                                : null
+                        ),
                     TextInput::make('numero_documento'),
                     Select::make('tipo_documento')
                         ->options([

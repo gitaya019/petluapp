@@ -20,6 +20,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\Clinica;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Facades\Filament;
+use Spatie\Permission\PermissionRegistrar;
 
 
 
@@ -36,6 +38,17 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->bootUsing(function () {
+                Filament::serving(function () {
+
+                    $tenantId = Filament::getTenant()?->id;
+
+                    if ($tenantId) {
+                        app(PermissionRegistrar::class)
+                            ->setPermissionsTeamId($tenantId);
+                    }
+                });
+            })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -50,7 +63,7 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationGroup('Seguridad') // opcional
                     ->navigationIcon('heroicon-o-shield-check')
-                    ->scopeToTenant(true) 
+                    ->scopeToTenant(true)
             ])
             ->middleware([
                 EncryptCookies::class,
