@@ -52,11 +52,19 @@ class User extends Authenticatable implements HasTenants
 
     public function getTenants(Panel $panel): Collection
     {
+        if ($this->isSuperAdmin()) {
+            return Clinica::all();
+        }
+
         return $this->clinicas;
     }
-
+    
     public function canAccessTenant(Model $tenant): bool
     {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
         return $this->clinicas()->whereKey($tenant->id)->exists();
     }
 
@@ -87,5 +95,10 @@ class User extends Authenticatable implements HasTenants
     public function historiales()
     {
         return $this->hasMany(HistorialMedico::class, 'veterinario_id');
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->is_super_admin;
     }
 }

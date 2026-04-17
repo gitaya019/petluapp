@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\PermissionRegistrar;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Gate;
+
 use App\Models\Role;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
             ->setPermissionClass(Permission::class)
             ->setRoleClass(Role::class);
 
-        //
+
+        Gate::before(function ($user, $ability) {
+            return $user->isSuperAdmin() ? true : null;
+        });
     }
 }
