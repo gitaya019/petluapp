@@ -30,8 +30,7 @@ class CreateUser extends CreateRecord
             // 2. roles (Spatie)
             $registrar = app(\Spatie\Permission\PermissionRegistrar::class);
             $registrar->setPermissionsTeamId($clinicaId);
-
-            $role = \App\Models\Role::find($roleId);
+            $role = \App\Models\Role::find($roleId); //ignore this error, is a valid code. Intelephense bug
 
             if ($role) {
                 $this->record->assignRole($role);
