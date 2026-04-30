@@ -21,12 +21,21 @@ class CreateUser extends CreateRecord
     {
         foreach ($this->data['clinica_roles'] ?? [] as $item) {
 
-            DB::table('model_has_roles')->insert([
-                'role_id' => $item['role_id'],
-                'model_type' => \App\Models\User::class,
-                'model_id' => $this->record->id,
-                'clinica_id' => $item['clinica_id'],
-            ]);
+            $clinicaId = $item['clinica_id'];
+            $roleId = $item['role_id'];
+
+            // 1. identificador (TENANTS)
+            $this->record->clinicas()->syncWithoutDetaching([$clinicaId]);
+
+            // 2. roles (Spatie)
+            $registrar = app(\Spatie\Permission\PermissionRegistrar::class);
+            $registrar->setPermissionsTeamId($clinicaId);
+
+            $role = \App\Models\Role::find($roleId);
+
+            if ($role) {
+                $this->record->assignRole($role);
+            }
         }
     }
 }

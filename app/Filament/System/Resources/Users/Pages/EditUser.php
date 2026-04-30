@@ -4,7 +4,7 @@ namespace App\Filament\System\Resources\Users\Pages;
 
 use App\Filament\System\Resources\Users\UserResource;
 use Filament\Resources\Pages\EditRecord;
-    use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB;
 
 class EditUser extends EditRecord
 {
@@ -44,18 +44,35 @@ class EditUser extends EditRecord
 
     protected function afterSave(): void
     {
-        DB::table('model_has_roles')
+        $registrar = app(\Spatie\Permission\PermissionRegistrar::class);
+
+        // 1. Sync clínicas
+        $clinicas = collect($this->data['clinica_roles'] ?? [])
+            ->pluck('clinica_id')
+            ->unique()
+            ->toArray();
+
+        $this->record->clinicas()->sync($clinicas);
+
+        // 2. 🔥 LIMPIEZA REAL EN BD (IMPORTANTE)
+        \DB::table('model_has_roles')
             ->where('model_id', $this->record->id)
+            ->where('model_type', \App\Models\User::class)
             ->delete();
 
+        // 3. Reasignar roles correctamente por clínica
         foreach ($this->data['clinica_roles'] ?? [] as $item) {
 
-            DB::table('model_has_roles')->insert([
-                'role_id' => $item['role_id'],
-                'model_type' => \App\Models\User::class,
-                'model_id' => $this->record->id,
-                'clinica_id' => $item['clinica_id'],
-            ]);
+            $registrar->setPermissionsTeamId($item['clinica_id']);
+
+            $role = \App\Models\Role::find($item['role_id']); //ignore this error, is a valid code. Intelephense bug
+
+            if ($role) {
+                $this->record->assignRole($role);
+            }
         }
+
+        // 4. limpiar cache
+        $registrar->forgetCachedPermissions();
     }
 }
