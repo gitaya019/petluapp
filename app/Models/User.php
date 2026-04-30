@@ -22,7 +22,8 @@ use Spatie\Permission\Traits\HasRoles;
     'tipo_documento',
     'password',
     'telefono',
-    'estado'
+    'estado',
+    'is_super_admin'
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements HasTenants

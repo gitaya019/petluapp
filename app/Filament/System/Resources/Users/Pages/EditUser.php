@@ -54,7 +54,7 @@ class EditUser extends EditRecord
 
         $this->record->clinicas()->sync($clinicas);
 
-        // 2. 🔥 LIMPIEZA REAL EN BD (IMPORTANTE)
+        // 2. 🔥 LIMPIEZA REAL EN BD
         \DB::table('model_has_roles') //ignore this error, is a valid code. Intelephense bug
             ->where('model_id', $this->record->id)
             ->where('model_type', \App\Models\User::class)
