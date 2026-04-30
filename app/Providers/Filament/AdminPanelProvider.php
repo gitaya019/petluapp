@@ -33,6 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->profile()
             ->path('admin')
+            ->brandName('PetluApp')
             ->login()
             ->tenant(Clinica::class)
             ->colors([
