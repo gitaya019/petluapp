@@ -52,20 +52,14 @@ class User extends Authenticatable implements HasTenants
 
     public function getTenants(Panel $panel): Collection
     {
-        if ($this->isSuperAdmin()) {
-            return Clinica::all();
-        }
-
-        return $this->clinicas;
+        return $this->clinicas()->get();
     }
-    
+
     public function canAccessTenant(Model $tenant): bool
     {
-        if ($this->isSuperAdmin()) {
-            return true;
-        }
-
-        return $this->clinicas()->whereKey($tenant->id)->exists();
+        return $this->clinicas()
+            ->whereKey($tenant->id)
+            ->exists();
     }
 
     public function mascotas()

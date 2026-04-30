@@ -44,14 +44,10 @@ class AdminPanelProvider extends PanelProvider
 
                     $tenantId = Filament::getTenant()?->id;
 
-                    $registrar = app(\Spatie\Permission\PermissionRegistrar::class);
-
                     if ($tenantId) {
-                        $registrar->setPermissionsTeamId($tenantId);
+                        app(\Spatie\Permission\PermissionRegistrar::class)
+                            ->setPermissionsTeamId($tenantId);
                     }
-
-                    // 🔥 ESTO ES LO QUE TE ESTÁ FALTANDO
-                    $registrar->forgetCachedPermissions();
                 });
             })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
