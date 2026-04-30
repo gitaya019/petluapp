@@ -27,8 +27,7 @@ class SystemPanelProvider extends PanelProvider
         return $panel
             ->id('system')
             ->path('system')
-                        ->brandName('PetluApp Center')
-
+            ->brandName('PetluApp Center')
             ->login()
             ->colors([
                 'primary' => Color::Red,
@@ -53,14 +52,8 @@ class SystemPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \App\Http\Middleware\EnsureSystemAdmin::class,
             ])
-            ->bootUsing(function () {
-                if (!Auth::check()) {
-                    return;
-                }
-
-                abort_unless(Auth::user()->isSuperAdmin(), 403);
-            })
             ->authMiddleware([
                 Authenticate::class,
             ]);
