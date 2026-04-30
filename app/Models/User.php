@@ -22,7 +22,8 @@ use Spatie\Permission\Traits\HasRoles;
     'tipo_documento',
     'password',
     'telefono',
-    'estado'
+    'estado',
+    'is_super_admin'
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements HasTenants
@@ -58,7 +59,7 @@ class User extends Authenticatable implements HasTenants
 
         return $this->clinicas;
     }
-    
+
     public function canAccessTenant(Model $tenant): bool
     {
         if ($this->isSuperAdmin()) {
@@ -99,6 +100,19 @@ class User extends Authenticatable implements HasTenants
 
     public function isSuperAdmin(): bool
     {
-        return $this->is_super_admin;
+        return (bool) $this->is_super_admin;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if ($panel->getId() === 'system') {
+            return $this->isSuperAdmin();
+        }
+
+        if ($panel->getId() === 'clinica') {
+            return $this->isSuperAdmin() || $this->clinicas()->exists();
+        }
+
+        return false;
     }
 }
