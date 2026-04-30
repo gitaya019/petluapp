@@ -40,7 +40,13 @@ class UsersTable
 
                 TextColumn::make('clinicas_count')
                     ->label('Clínicas')
-                    ->counts('clinicas')
+                    ->getStateUsing(function ($record) {
+                        return \Illuminate\Support\Facades\DB::table('model_has_roles')
+                            ->where('model_id', $record->id)
+                            ->where('model_type', \App\Models\User::class)
+                            ->distinct('clinica_id')
+                            ->count('clinica_id');
+                    })
                     ->badge(),
             ])
             ->filters([
