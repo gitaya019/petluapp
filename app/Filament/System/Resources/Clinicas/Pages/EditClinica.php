@@ -11,6 +11,7 @@ use Spatie\Permission\PermissionRegistrar;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EditClinica extends EditRecord
 {
@@ -40,13 +41,13 @@ class EditClinica extends EditRecord
 
         $this->record->users()->sync($users);
 
-        $role = \App\Models\Role::where('name', 'super_admin')
+        $role = \App\Models\Role::where('name', 'super_admin') //ignore error intelephense
             ->where('clinica_id', $this->record->id)
             ->first();
 
         if (! $role) return;
 
-        \DB::transaction(function () use ($users, $role) {
+        \DB::transaction(function () use ($users, $role) { // ignore error intelephense
 
             \DB::table('model_has_roles')
                 ->where('model_type', \App\Models\User::class)
@@ -54,7 +55,7 @@ class EditClinica extends EditRecord
                 ->delete();
 
             foreach ($users as $userId) {
-                \DB::table('model_has_roles')->updateOrInsert(
+                \DB::table('model_has_roles')->updateOrInsert( //  ignore error intelephense
                     [
                         'role_id' => $role->id,
                         'model_type' => \App\Models\User::class,
