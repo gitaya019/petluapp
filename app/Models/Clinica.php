@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\PermissionRegistrar;
 
 class Clinica extends Model implements HasName
 {
@@ -80,4 +82,35 @@ class Clinica extends Model implements HasName
         return $this->hasMany(\App\Models\Role::class);
     }
 
+    protected static function booted()
+    {
+        // 🔵 SOLO soft delete
+        static::deleting(function ($clinica) {
+
+            if (! $clinica->isForceDeleting()) {
+                return; // ❌ no tocar nada en soft delete
+            }
+
+            // 🔴 SOLO si es delete definitivo (forceDelete)
+
+            // 1. limpiar usuarios (pivot clinica_user)
+            $clinica->users()->detach();
+
+            // 2. obtener roles de esa clínica
+            $roles = Role::where('clinica_id', $clinica->id)->get(); //ignore error intelephense
+
+            $roleIds = $roles->pluck('id');
+
+            // 3. borrar relaciones model_has_roles
+            DB::table('model_has_roles')
+                ->whereIn('role_id', $roleIds)
+                ->delete();
+
+            // 4. borrar roles de la clínica
+            Role::where('clinica_id', $clinica->id)->delete(); //ignore error intelephense
+
+            // 5. limpiar cache Spatie
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
+        });
+    }
 }

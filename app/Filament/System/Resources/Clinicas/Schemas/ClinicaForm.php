@@ -32,6 +32,10 @@ class ClinicaForm
                             ->label('Teléfono')
                             ->tel(),
 
+                        TextInput::make('direccion')
+                            ->label('Dirección')
+                            ->maxLength(255),
+
                         Toggle::make('estado')
                             ->label('Activa')
                             ->default(true),
