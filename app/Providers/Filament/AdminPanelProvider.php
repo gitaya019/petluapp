@@ -19,8 +19,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\Clinica;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use Filament\Facades\Filament;
-use Spatie\Permission\PermissionRegistrar;
+
+use App\Actions\ChangePasswordAction;
 
 
 
@@ -31,7 +31,9 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->profile()
+            ->userMenuItems([
+                ChangePasswordAction::make(),
+            ])
             ->path('admin')
             ->brandName('PetluApp')
             ->login()
