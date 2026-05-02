@@ -45,8 +45,13 @@ class AdminPanelProvider extends PanelProvider
                     $tenantId = Filament::getTenant()?->id;
 
                     if ($tenantId) {
-                        app(\Spatie\Permission\PermissionRegistrar::class)
-                            ->setPermissionsTeamId($tenantId);
+                        $permissionRegistrar = app(PermissionRegistrar::class);
+
+                        // 🔹 Setea el tenant (team_id)
+                        $permissionRegistrar->setPermissionsTeamId($tenantId);
+
+                        // 🔥Limpia caché de permisos para ese contexto
+                        $permissionRegistrar->forgetCachedPermissions();
                     }
                 });
             })
