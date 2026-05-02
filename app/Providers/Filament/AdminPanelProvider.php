@@ -39,22 +39,6 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->bootUsing(function () {
-                Filament::serving(function () {
-
-                    $tenantId = Filament::getTenant()?->id;
-
-                    if ($tenantId) {
-                        $permissionRegistrar = app(PermissionRegistrar::class);
-
-                        // 🔹 Setea el tenant (team_id)
-                        $permissionRegistrar->setPermissionsTeamId($tenantId);
-
-                        // 🔥Limpia caché de permisos para ese contexto
-                        $permissionRegistrar->forgetCachedPermissions();
-                    }
-                });
-            })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -80,6 +64,8 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \App\Http\Middleware\SetPermissionsTeam::class,
+
             ])
             ->authMiddleware([
                 Authenticate::class,
