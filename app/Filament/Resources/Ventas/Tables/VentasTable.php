@@ -85,6 +85,11 @@ class VentasTable
                     ->schema([
                         Select::make('estado')
                             ->label('Estado')
+                            ->placeholder('Selecciona un estado')
+                            ->loadingMessage('Cargando estados...')
+                            ->noSearchResultsMessage('No se encontraron estados')
+                            ->noOptionsMessage('No hay estados disponibles')
+                            ->searchingMessage('buscando estados...')
                             ->options([
                                 'pendiente' => 'Pendiente',
                                 'pagado' => 'Pagado',
