@@ -47,6 +47,14 @@ class ClinicaForm
                         Select::make('users')
                             ->label('Usuarios')
                             ->relationship('users', 'name')
+
+                            ->placeholder('Selecciona un usuario')
+                            ->loadingMessage('Cargando usuarios...')
+                            ->noSearchResultsMessage('No se encontraron usuarios')
+                            ->noOptionsMessage('No hay usuarios disponibles')
+                            ->searchingMessage('buscando usuarios...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
                             ->multiple()
                             ->searchable()
                             ->preload(),

@@ -64,11 +64,25 @@ class UserForm
                                 Select::make('clinica_id')
                                     ->label('Clínica')
                                     ->relationship('clinicas', 'nombre')
+                                    ->placeholder('Selecciona una clinica')
+                                    ->loadingMessage('Cargando clínicas...')
+                                    ->noSearchResultsMessage('No se encontraron clínicas')
+                                    ->noOptionsMessage('No hay clínicas disponibles')
+                                    ->searchingMessage('buscando clínicas...')
+                                    ->searchDebounce(500)
+                                    ->searchPrompt('Buscar por nombre...')
                                     ->required()
                                     ->reactive(),
 
                                 Select::make('role_id')
                                     ->label('Rol')
+                                    ->placeholder('Selecciona un rol')
+                                    ->loadingMessage('Cargando roles...')
+                                    ->noSearchResultsMessage('No se encontraron roles')
+                                    ->noOptionsMessage('No hay roles disponibles')
+                                    ->searchingMessage('buscando roles...')
+                                    ->searchDebounce(500)
+                                    ->searchPrompt('Buscar por nombre...')
                                     ->options(function (callable $get) {
                                         $clinicaId = $get('clinica_id');
 
