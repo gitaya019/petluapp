@@ -44,6 +44,9 @@ class VentaForm
                             ->required(),
 
                         Select::make('estado')
+                            ->placeholder('Selecciona un estado')
+                            ->loadingMessage('Cargando estados...')
+                            ->noSearchResultsMessage('No se encontraron estados')
                             ->options([
                                 'pagado' => 'Pagado',
                                 'pendiente' => 'Pendiente',

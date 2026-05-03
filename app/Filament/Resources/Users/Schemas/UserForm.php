@@ -43,6 +43,13 @@ class UserForm
 
                     Select::make('roles')
                         ->label('Roles')
+                        ->placeholder('Selecciona un rol')
+                        ->loadingMessage('Cargando roles...')
+                        ->noSearchResultsMessage('No se encontraron roles')
+                        ->noOptionsMessage('No hay roles disponibles')
+                        ->searchingMessage('buscando roles...')
+                        ->searchDebounce(500)
+                        ->searchPrompt('Buscar por nombre...')
                         ->relationship(
                             name: 'roles',
                             titleAttribute: 'name',
