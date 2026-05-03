@@ -29,6 +29,8 @@ class MovimientoStockForm
                             ->required(),
 
                         Select::make('tipo')
+                            ->placeholder('Selecciona un tipo de movimiento')
+                            ->loadingMessage('Cargando tipos...')
                             ->options([
                                 'entrada' => 'Entrada',
                                 'salida' => 'Salida',
