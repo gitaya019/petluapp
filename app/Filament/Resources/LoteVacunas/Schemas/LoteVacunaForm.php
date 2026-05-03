@@ -19,6 +19,13 @@ class LoteVacunaForm
                     ->schema([
                         Select::make('vacuna_id')
                             ->relationship('vacuna', 'nombre')
+                            ->placeholder('Selecciona una vacuna')
+                            ->loadingMessage('Cargando vacunas...')
+                            ->noSearchResultsMessage('No se encontraron vacunas')
+                            ->noOptionsMessage('No hay vacunas disponibles')
+                            ->searchingMessage('buscando vacunas...')
+                            ->searchDebounce(500)
+                        ->searchPrompt('Buscar por nombre...')
                             ->searchable()
                             ->required(),
 

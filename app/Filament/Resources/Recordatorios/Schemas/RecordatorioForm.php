@@ -19,6 +19,13 @@ class RecordatorioForm
                     ->schema([
                         Select::make('mascota_id')
                             ->relationship('mascota', 'nombre')
+                            ->placeholder('Selecciona una mascota')
+                            ->loadingMessage('Cargando mascotas...')
+                            ->noSearchResultsMessage('No se encontraron mascotas')
+                            ->noOptionsMessage('No hay mascotas disponibles')
+                            ->searchingMessage('buscando mascotas...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
                             ->required(),
 
                         TextInput::make('tipo'),

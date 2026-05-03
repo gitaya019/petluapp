@@ -19,6 +19,13 @@ class MovimientoStockForm
                     ->schema([
                         Select::make('lote_id')
                             ->relationship('lote', 'numero_lote')
+                            ->placeholder('Selecciona un lote de vacuna')
+                            ->loadingMessage('Cargando lotes...')
+                            ->noSearchResultsMessage('No se encontraron lotes')
+                            ->noOptionsMessage('No hay lotes disponibles')
+                            ->searchingMessage('buscando lotes...')
+                            ->searchPrompt('Buscar por número de lote...')
+                            ->searchDebounce(500)
                             ->required(),
 
                         Select::make('tipo')

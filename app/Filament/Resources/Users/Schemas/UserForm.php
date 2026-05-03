@@ -29,6 +29,9 @@ class UserForm
                         ->hidden(fn(string $operation) => $operation === 'edit'),
                     TextInput::make('numero_documento'),
                     Select::make('tipo_documento')
+                        ->placeholder('Selecciona un tipo de documento')
+                        ->loadingMessage('Cargando tipos de documento...')
+                        ->noOptionsMessage('No hay tipos de documento disponibles')
                         ->options([
                             'CC' => 'Cédula',
                             'TI' => 'Tarjeta',

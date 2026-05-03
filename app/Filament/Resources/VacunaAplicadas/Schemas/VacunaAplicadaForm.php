@@ -19,13 +19,35 @@ class VacunaAplicadaForm
                     ->schema([
                         Select::make('mascota_id')
                             ->relationship('mascota', 'nombre')
+                            ->placeholder('Selecciona una mascota')
+                            ->loadingMessage('Cargando mascotas...')
+                            ->noSearchResultsMessage('No se encontraron mascotas')
+                            ->noOptionsMessage('No hay mascotas disponibles')
+                            ->searchingMessage('buscando mascotas...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
                             ->searchable()
                             ->required(),
 
                         Select::make('vacuna_id')
                             ->relationship('vacuna', 'nombre')
+                            ->placeholder('Selecciona una vacuna')
+                            ->loadingMessage('Cargando vacunas...')
+                            ->noSearchResultsMessage('No se encontraron vacunas')
+                            ->noOptionsMessage('No hay vacunas disponibles')
+                            ->searchingMessage('buscando vacunas...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
                             ->required(),
+
                         Select::make('lote_id')
+                            ->placeholder('Selecciona un lote')
+                            ->loadingMessage('Cargando lotes...')
+                            ->noSearchResultsMessage('No se encontraron lotes de vacunas')
+                            ->noOptionsMessage('No hay lotes disponibles')
+                            ->searchingMessage('buscando lotes...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por numero de lote...')
                             ->relationship(
                                 'lote',
                                 'numero_lote',

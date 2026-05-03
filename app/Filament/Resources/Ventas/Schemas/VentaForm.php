@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Filament\Resources\Ventas\Schemas;
+
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
@@ -14,30 +15,44 @@ class VentaForm
         return $schema
             ->components([
                 Section::make('Venta')
-    ->icon('heroicon-o-currency-dollar')
-    ->schema([
-        Select::make('usuario_id')
-            ->relationship('usuario', 'name')
-            ->required(),
+                    ->icon('heroicon-o-currency-dollar')
+                    ->schema([
+                        Select::make('usuario_id')
+                            ->relationship('usuario', 'name')
+                            ->placeholder('Selecciona un usuario')
+                            ->loadingMessage('Cargando usuarios...')
+                            ->noSearchResultsMessage('No se encontraron usuarios')
+                            ->noOptionsMessage('No hay usuarios disponibles')
+                            ->searchingMessage('buscando usuarios...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
+                            ->required(),
 
-        Select::make('cliente_id')
-            ->relationship('cliente', 'name')
-            ->required(),
+                        Select::make('cliente_id')
+                            ->relationship('cliente', 'name')
+                            ->placeholder('Selecciona un cliente')
+                            ->loadingMessage('Cargando clientes...')
+                            ->noSearchResultsMessage('No se encontraron clientes')
+                            ->noOptionsMessage('No hay clientes disponibles')
+                            ->searchingMessage('buscando clientes...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
+                            ->required(),
 
-        TextInput::make('total')
-            ->numeric()
-            ->required(),
+                        TextInput::make('total')
+                            ->numeric()
+                            ->required(),
 
-        Select::make('estado')
-            ->options([
-                'pagado' => 'Pagado',
-                'pendiente' => 'Pendiente',
-            ])
-            ->required(),
+                        Select::make('estado')
+                            ->options([
+                                'pagado' => 'Pagado',
+                                'pendiente' => 'Pendiente',
+                            ])
+                            ->required(),
 
-        DatePicker::make('fecha')
-            ->required(),
-    ])->columns(2)
+                        DatePicker::make('fecha')
+                            ->required(),
+                    ])->columns(2)
             ]);
     }
 }

@@ -19,10 +19,24 @@ class HistorialMedicoForm
                     ->schema([
                         Select::make('mascota_id')
                             ->relationship('mascota', 'nombre')
+                            ->placeholder('Selecciona una mascota')
+                            ->loadingMessage('Cargando mascotas...')
+                            ->noSearchResultsMessage('No se encontraron mascotas')
+                            ->noOptionsMessage('No hay mascotas disponibles')
+                            ->searchingMessage('buscando mascotas...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
                             ->required(),
 
                         Select::make('veterinario_id')
                             ->relationship('veterinario', 'name')
+                            ->placeholder('Selecciona un veterinario')
+                            ->loadingMessage('Cargando veterinarios...')
+                            ->noSearchResultsMessage('No se encontraron veterinarios')
+                            ->noOptionsMessage('No hay veterinarios disponibles')
+                            ->searchingMessage('buscando veterinarios...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
                             ->required(),
 
                         Textarea::make('motivo_consulta'),

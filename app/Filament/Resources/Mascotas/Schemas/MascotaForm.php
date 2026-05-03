@@ -24,6 +24,12 @@ class MascotaForm
                     Select::make('user_id')
                         ->relationship('user', 'name')
                         ->placeholder('Selecciona un dueño')
+                        ->loadingMessage('Cargando dueños...')
+                        ->noSearchResultsMessage('No se encontraron dueños')
+                        ->noOptionsMessage('No hay dueños disponibles')
+                        ->searchingMessage('buscando dueños...')
+                        ->searchDebounce(500)
+                        ->searchPrompt('Buscar por nombre...')
                         ->searchable()
                         ->required(),
 
