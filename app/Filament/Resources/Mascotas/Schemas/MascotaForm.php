@@ -23,6 +23,7 @@ class MascotaForm
                 ->schema([
                     Select::make('user_id')
                         ->relationship('user', 'name')
+                        ->placeholder('Selecciona un dueño')
                         ->searchable()
                         ->required(),
 
