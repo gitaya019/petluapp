@@ -19,6 +19,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\Clinica;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use EslamRedaDiv\FilamentCopilot\FilamentCopilotPlugin;
+
 
 use App\Actions\ChangePasswordAction;
 
@@ -54,7 +56,9 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationGroup('Seguridad') // opcional
                     ->navigationIcon('heroicon-o-shield-check')
-                    ->scopeToTenant(true)
+                    ->scopeToTenant(true),
+   FilamentCopilotPlugin::make(),
+
             ])
             ->middleware([
                 EncryptCookies::class,

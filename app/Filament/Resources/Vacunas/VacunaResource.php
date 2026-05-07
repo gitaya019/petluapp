@@ -13,14 +13,15 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
-class VacunaResource extends Resource
+class VacunaResource extends Resource implements CopilotResource
 {
     protected static ?string $model = Vacuna::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Beaker;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Inventario';
+    protected static string|\UnitEnum|null $navigationGroup = 'Inventario';
 
     public static function form(Schema $schema): Schema
     {
@@ -34,9 +35,7 @@ class VacunaResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
@@ -45,6 +44,24 @@ class VacunaResource extends Resource
             'index' => ListVacunas::route('/'),
             'create' => CreateVacuna::route('/create'),
             'edit' => EditVacuna::route('/{record}/edit'),
+        ];
+    }
+
+    public static function copilotResourceDescription(): ?string
+    {
+        return '
+            Gestiona vacunas veterinarias.
+            Controla stock, fechas de vencimiento,
+            lotes y disponibilidad.
+        ';
+    }
+
+    public static function copilotTools(): array
+    {
+        return [
+            new \App\Filament\Resources\Vacunas\CopilotTools\ListVacunasTool(),
+            new \App\Filament\Resources\Vacunas\CopilotTools\SearchVacunasTool(),
+            new \App\Filament\Resources\Vacunas\CopilotTools\VacunasVencidasTool(),
         ];
     }
 }

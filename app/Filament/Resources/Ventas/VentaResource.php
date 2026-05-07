@@ -13,14 +13,15 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
-class VentaResource extends Resource
+class VentaResource extends Resource implements CopilotResource
 {
     protected static ?string $model = Venta::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CurrencyDollar;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Finanzas';
+    protected static string|\UnitEnum|null $navigationGroup = 'Finanzas';
 
     public static function form(Schema $schema): Schema
     {
@@ -34,9 +35,7 @@ class VentaResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
@@ -45,6 +44,24 @@ class VentaResource extends Resource
             'index' => ListVentas::route('/'),
             'create' => CreateVenta::route('/create'),
             'edit' => EditVenta::route('/{record}/edit'),
+        ];
+    }
+
+    public static function copilotResourceDescription(): ?string
+    {
+        return '
+            Gestiona ventas veterinarias,
+            ingresos, pagos, productos
+            y transacciones del sistema.
+        ';
+    }
+
+    public static function copilotTools(): array
+    {
+        return [
+            new \App\Filament\Resources\Ventas\CopilotTools\ListVentasTool(),
+            new \App\Filament\Resources\Ventas\CopilotTools\VentasHoyTool(),
+            new \App\Filament\Resources\Ventas\CopilotTools\VentasMesTool(),
         ];
     }
 }

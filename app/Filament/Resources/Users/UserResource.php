@@ -9,15 +9,15 @@ use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\Permission\PermissionRegistrar;
-use Filament\Facades\Filament;
+use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
-class UserResource extends Resource
+class UserResource extends Resource implements CopilotResource
 {
     protected static ?string $model = User::class;
 
@@ -25,8 +25,7 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Admin';
-
+    protected static string|\UnitEnum|null $navigationGroup = 'Admin';
 
     public static function form(Schema $schema): Schema
     {
@@ -56,5 +55,22 @@ class UserResource extends Resource
     {
         return parent::getEloquentQuery()
             ->where('is_super_admin', false);
+    }
+
+    public static function copilotResourceDescription(): ?string
+    {
+        return '
+            Gestiona usuarios del sistema veterinario.
+            Incluye veterinarios, administradores,
+            auxiliares y permisos.
+        ';
+    }
+
+    public static function copilotTools(): array
+    {
+        return [
+            new \App\Filament\Resources\Users\CopilotTools\ListUsersTool(),
+            new \App\Filament\Resources\Users\CopilotTools\SearchUsersTool(),
+        ];
     }
 }
