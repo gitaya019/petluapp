@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Gate;
 
 use App\Models\Role;
 
+use App\Observers\CopilotConversationObserver;
+use App\Observers\CopilotAuditLogObserver;
+use App\Observers\CopilotAgentMemoryObserver;
+use App\Observers\CopilotRateLimitObserver;
+use App\Observers\CopilotTokenUsageObserver;
+
+use EslamRedaDiv\FilamentCopilot\Models\CopilotConversation;
+use EslamRedaDiv\FilamentCopilot\Models\CopilotAuditLog;
+use EslamRedaDiv\FilamentCopilot\Models\CopilotAgentMemory;
+use EslamRedaDiv\FilamentCopilot\Models\CopilotRateLimit;
+use EslamRedaDiv\FilamentCopilot\Models\CopilotTokenUsage;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -32,5 +44,11 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->isSuperAdmin() ? true : null;
         });
+
+        CopilotConversation::observe(CopilotConversationObserver::class);
+        CopilotAuditLog::observe(CopilotAuditLogObserver::class);
+        CopilotAgentMemory::observe(CopilotAgentMemoryObserver::class);
+        CopilotRateLimit::observe(CopilotRateLimitObserver::class);
+        CopilotTokenUsage::observe(CopilotTokenUsageObserver::class);
     }
 }
