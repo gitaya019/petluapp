@@ -12,10 +12,21 @@ class Recordatorio extends Model
     protected $fillable = [
         'clinica_id',
         'mascota_id',
+        'vacuna_id',
+        'vacuna_aplicada_id',
         'tipo',
         'mensaje',
         'fecha_programada',
-        'estado'
+        'estado',
+        'enviado',
+        'enviado_at',
+        'correo_destino',
+    ];
+
+    protected $casts = [
+        'fecha_programada' => 'datetime',
+        'enviado_at' => 'datetime',
+        'enviado' => 'boolean',
     ];
 
     public function mascota()
@@ -26,5 +37,15 @@ class Recordatorio extends Model
     public function clinica()
     {
         return $this->belongsTo(Clinica::class);
+    }
+
+    public function vacuna()
+    {
+        return $this->belongsTo(Vacuna::class);
+    }
+
+    public function vacunaAplicada()
+    {
+        return $this->belongsTo(VacunaAplicada::class);
     }
 }

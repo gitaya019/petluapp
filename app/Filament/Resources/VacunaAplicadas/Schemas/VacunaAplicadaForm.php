@@ -7,6 +7,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use App\Models\LoteVacuna;
 
 class VacunaAplicadaForm
 {
@@ -35,28 +38,37 @@ class VacunaAplicadaForm
                             ->loadingMessage('Cargando vacunas...')
                             ->noSearchResultsMessage('No se encontraron vacunas')
                             ->noOptionsMessage('No hay vacunas disponibles')
-                            ->searchingMessage('buscando vacunas...')
+                            ->searchingMessage('Buscando vacunas...')
                             ->searchDebounce(500)
                             ->searchPrompt('Buscar por nombre...')
-                            ->required(),
+                            ->searchable()
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function ($state, Set $set) {
 
+                                $lote = LoteVacuna::query()
+                                    ->where('vacuna_id', $state)
+                                    ->where('stock_actual', '>', 0)
+                                    ->first();
+
+                                $set('lote_id', $lote?->id);
+                            }),
                         Select::make('lote_id')
-                            ->placeholder('Selecciona un lote')
-                            ->loadingMessage('Cargando lotes...')
-                            ->noSearchResultsMessage('No se encontraron lotes de vacunas')
-                            ->noOptionsMessage('No hay lotes disponibles')
-                            ->searchingMessage('buscando lotes...')
-                            ->searchDebounce(500)
-                            ->searchPrompt('Buscar por numero de lote...')
                             ->relationship(
                                 'lote',
                                 'numero_lote',
-                                fn($query) => $query->where('stock_actual', '>', 0)
+                                fn($query, Get $get) =>
+                                $query
+                                    ->where('vacuna_id', $get('vacuna_id'))
+                                    ->where('stock_actual', '>', 0)
                             )
-                            ->required()
+                            ->label('Lote asignado')
+                            ->disabled()
+                            ->dehydrated()
                             ->searchable()
                             ->preload()
-                            ->helperText('Solo se muestran lotes con stock'),
+                            ->required()
+                            ->helperText('El lote se asigna automáticamente según la vacuna seleccionada'),
 
                         DatePicker::make('fecha_aplicacion')
                             ->required(),

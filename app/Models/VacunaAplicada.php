@@ -68,7 +68,7 @@ class VacunaAplicada extends Model
 
     public static function esquemaDosis($mascotaId, $vacunaId)
     {
-        $vacuna = Vacuna::find($vacunaId);
+        $vacuna = Vacuna::find($vacunaId); //ignore bug intelephense
 
         if (!$vacuna) {
             return [0, 1];
@@ -76,7 +76,7 @@ class VacunaAplicada extends Model
 
         $dosisBase = $vacuna->dosis ?? 1;
 
-        $aplicadas = self::porMascotaVacuna($mascotaId, $vacunaId)->count();
+        $aplicadas = self::porMascotaVacuna($mascotaId, $vacunaId)->count(); //ignore bug intelephense
 
         if ($aplicadas == 0) {
             return [0, $dosisBase];
@@ -223,5 +223,18 @@ class VacunaAplicada extends Model
                 'subtotal' => $precio,
             ]);
         });
+    }
+
+    public function getProximaDosisAttribute()
+    {
+        $dias = $this->vacuna?->dias_refuerzo ?? 0;
+
+        if (!$dias) {
+            return null;
+        }
+
+        return $this->fecha_aplicacion
+            ? $this->fecha_aplicacion->copy()->addDays($dias)
+            : null;
     }
 }

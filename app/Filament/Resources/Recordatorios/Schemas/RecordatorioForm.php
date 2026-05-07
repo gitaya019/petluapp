@@ -14,33 +14,84 @@ class RecordatorioForm
     {
         return $schema
             ->components([
+
                 Section::make('Recordatorio')
                     ->icon('heroicon-o-bell')
                     ->schema([
+
+                        // =========================
+                        // 🐶 MASCOTA (PRO SELECT)
+                        // =========================
                         Select::make('mascota_id')
                             ->relationship('mascota', 'nombre')
+                            ->searchable()
+                            ->preload()
+                            ->required()
                             ->placeholder('Selecciona una mascota')
                             ->loadingMessage('Cargando mascotas...')
                             ->noSearchResultsMessage('No se encontraron mascotas')
                             ->noOptionsMessage('No hay mascotas disponibles')
-                            ->searchingMessage('buscando mascotas...')
+                            ->searchingMessage('Buscando mascotas...')
                             ->searchDebounce(500)
-                            ->searchPrompt('Buscar por nombre...')
+                            ->searchPrompt('Buscar por nombre...'),
+
+                        // =========================
+                        // 💉 VACUNA (IGUAL DE PRO)
+                        // =========================
+                        Select::make('vacuna_id')
+                            ->relationship('vacuna', 'nombre')
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->placeholder('Selecciona una vacuna')
+                            ->loadingMessage('Cargando vacunas...')
+                            ->noSearchResultsMessage('No se encontraron vacunas')
+                            ->noOptionsMessage('No hay vacunas disponibles')
+                            ->searchingMessage('Buscando vacunas...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre de vacuna...'),
+
+                        // =========================
+                        // 🧠 TIPO
+                        // =========================
+                        TextInput::make('tipo')
+                            ->required()
+                            ->maxLength(100),
+
+                        // =========================
+                        // 📝 MENSAJE
+                        // =========================
+                        TextInput::make('mensaje')
+                            ->required()
+                            ->columnSpanFull()
+                            ->maxLength(255),
+
+                        // =========================
+                        // 📅 FECHA
+                        // =========================
+                        DatePicker::make('fecha_programada')
                             ->required(),
 
-                        TextInput::make('tipo'),
-
-                        TextInput::make('mensaje'),
-
-                        DatePicker::make('fecha_programada'),
-
+                        // =========================
+                        // 📊 ESTADO
+                        // =========================
                         Select::make('estado')
+                            ->placeholder('Selecciona una estado')
+                            ->loadingMessage('Cargando estados...')
+                            ->noSearchResultsMessage('No se encontraron estados')
+                            ->noOptionsMessage('No hay estados disponibles')
+                            ->searchingMessage('Buscando estados...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre de estado...')
                             ->options([
                                 'pendiente' => 'Pendiente',
                                 'enviado' => 'Enviado',
                             ])
-                            ->default('pendiente'),
-                    ])->columns(2)
+                            ->default('pendiente')
+                            ->required(),
+
+                    ])
+                    ->columns(2),
             ]);
     }
 }
