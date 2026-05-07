@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Recordatorios\Tables;
 
-use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
@@ -10,7 +9,11 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 
 class RecordatoriosTable
 {
@@ -31,13 +34,14 @@ class RecordatoriosTable
                     ->sortable()
                     ->icon('heroicon-o-sparkles'),
 
-                BadgeColumn::make('tipo')
+                TextColumn::make('tipo')
                     ->label('Tipo')
-                    ->colors([
-                        'warning' => 'refuerzo_15_dias',
-                        'danger' => 'refuerzo_1_dia',
-                        'gray' => true,
-                    ])
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'refuerzo_15_dias' => 'warning',
+                        'refuerzo_1_dia' => 'danger',
+                        default => 'gray',
+                    })
                     ->formatStateUsing(fn($state) => match ($state) {
                         'refuerzo_15_dias' => '15 días',
                         'refuerzo_1_dia' => '1 día',
@@ -58,12 +62,13 @@ class RecordatoriosTable
 
                 TextColumn::make('estado')
                     ->label('Estado')
-                    ->colors([
-                        'success' => 'enviado',
-                        'warning' => 'pendiente',
-                        'danger' => 'vencido',
-                        'gray' => true,
-                    ])
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'enviado' => 'success',
+                        'pendiente' => 'warning',
+                        'vencido' => 'danger',
+                        default => 'gray',
+                    })
                     ->formatStateUsing(fn($state) => ucfirst($state)),
 
                 TextColumn::make('enviado_at')
@@ -74,9 +79,10 @@ class RecordatoriosTable
                     ->toggleable(),
 
             ])
+
             ->defaultSort('fecha_programada', 'asc')
 
-            // 🔍 FILTROS PRO
+            // 🔍 FILTROS
             ->filters([
 
                 SelectFilter::make('estado')
@@ -94,28 +100,37 @@ class RecordatoriosTable
 
                 Filter::make('hoy')
                     ->label('Hoy')
-                    ->query(fn($query) => $query->whereDate('fecha_programada', today())),
+                    ->query(
+                        fn($query) =>
+                        $query->whereDate('fecha_programada', today())
+                    ),
 
                 Filter::make('proximos_7_dias')
                     ->label('Próximos 7 días')
-                    ->query(fn($query) => $query->whereBetween('fecha_programada', [now(), now()->addDays(7)])),
+                    ->query(
+                        fn($query) =>
+                        $query->whereBetween('fecha_programada', [
+                            now(),
+                            now()->addDays(7)
+                        ])
+                    ),
 
                 Filter::make('vencidos')
                     ->label('Vencidos')
-                    ->query(fn($query) => $query->where('fecha_programada', '<', now())),
+                    ->query(
+                        fn($query) =>
+                        $query->where('fecha_programada', '<', now())
+                    ),
             ])
 
-            // 🔎 BUSCADOR GLOBAL MÁS POTENTE
+            // 🔎 BUSCADOR GLOBAL
             ->searchable()
 
-            // ⚡ ACCIONES
             ->recordActions([
-                EditAction::make()
-                    ->icon('heroicon-o-pencil-square'),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-
-            // 🧨 BULK ACTIONS
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
