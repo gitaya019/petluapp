@@ -57,8 +57,7 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationGroup('Seguridad') // opcional
                     ->navigationIcon('heroicon-o-shield-check')
                     ->scopeToTenant(true),
-   FilamentCopilotPlugin::make(),
-
+                FilamentCopilotPlugin::make()
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
+use EslamRedaDiv\FilamentCopilot\Concerns\HasCopilotChat;
+
 
 #[Fillable([
     'name',
@@ -29,7 +31,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements HasTenants
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasRoles;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles, HasCopilotChat;
 
     /**
      * Casts
