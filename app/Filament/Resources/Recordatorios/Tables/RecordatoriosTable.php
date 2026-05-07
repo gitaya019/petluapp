@@ -2,11 +2,15 @@
 
 namespace App\Filament\Resources\Recordatorios\Tables;
 
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Tables\Columns\BadgeColumn;
 
 class RecordatoriosTable
 {
@@ -17,50 +21,101 @@ class RecordatoriosTable
 
                 TextColumn::make('mascota.nombre')
                     ->label('Mascota')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->icon('heroicon-o-heart'),
 
                 TextColumn::make('vacuna.nombre')
                     ->label('Vacuna')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->icon('heroicon-o-sparkles'),
 
-                TextColumn::make('tipo')
-                    ->badge()
-                    ->color(fn ($state) => match ($state) {
-                        'refuerzo_15_dias' => 'warning',
-                        'refuerzo_1_dia' => 'danger',
-                        default => 'gray',
+                BadgeColumn::make('tipo')
+                    ->label('Tipo')
+                    ->colors([
+                        'warning' => 'refuerzo_15_dias',
+                        'danger' => 'refuerzo_1_dia',
+                        'gray' => true,
+                    ])
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'refuerzo_15_dias' => '15 días',
+                        'refuerzo_1_dia' => '1 día',
+                        default => $state,
                     }),
 
                 TextColumn::make('mensaje')
-                    ->limit(30)
-                    ->tooltip(fn ($record) => $record->mensaje),
+                    ->label('Mensaje')
+                    ->limit(40)
+                    ->tooltip(fn($record) => $record->mensaje)
+                    ->wrap(),
 
                 TextColumn::make('fecha_programada')
+                    ->label('Fecha')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->icon('heroicon-o-calendar-days'),
 
                 TextColumn::make('estado')
-                    ->badge()
-                    ->color(fn ($state) => match ($state) {
-                        'enviado' => 'success',
-                        'pendiente' => 'warning',
-                        default => 'gray',
-                    }),
+                    ->label('Estado')
+                    ->colors([
+                        'success' => 'enviado',
+                        'warning' => 'pendiente',
+                        'danger' => 'vencido',
+                        'gray' => true,
+                    ])
+                    ->formatStateUsing(fn($state) => ucfirst($state)),
 
                 TextColumn::make('enviado_at')
-                    ->dateTime()
                     ->label('Enviado')
-                    ->placeholder('No enviado'),
+                    ->dateTime()
+                    ->sortable()
+                    ->placeholder('—')
+                    ->toggleable(),
 
             ])
             ->defaultSort('fecha_programada', 'asc')
+
+            // 🔍 FILTROS PRO
             ->filters([
-                //
+
+                SelectFilter::make('estado')
+                    ->options([
+                        'pendiente' => 'Pendiente',
+                        'enviado' => 'Enviado',
+                        'vencido' => 'Vencido',
+                    ]),
+
+                SelectFilter::make('tipo')
+                    ->options([
+                        'refuerzo_15_dias' => 'Refuerzo 15 días',
+                        'refuerzo_1_dia' => 'Refuerzo 1 día',
+                    ]),
+
+                Filter::make('hoy')
+                    ->label('Hoy')
+                    ->query(fn($query) => $query->whereDate('fecha_programada', today())),
+
+                Filter::make('proximos_7_dias')
+                    ->label('Próximos 7 días')
+                    ->query(fn($query) => $query->whereBetween('fecha_programada', [now(), now()->addDays(7)])),
+
+                Filter::make('vencidos')
+                    ->label('Vencidos')
+                    ->query(fn($query) => $query->where('fecha_programada', '<', now())),
             ])
+
+            // 🔎 BUSCADOR GLOBAL MÁS POTENTE
+            ->searchable()
+
+            // ⚡ ACCIONES
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->icon('heroicon-o-pencil-square'),
             ])
-            ->toolbarActions([
+
+            // 🧨 BULK ACTIONS
+            ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
