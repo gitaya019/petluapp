@@ -25,7 +25,8 @@ use EslamRedaDiv\FilamentCopilot\Concerns\HasCopilotChat;
     'password',
     'telefono',
     'estado',
-    'is_super_admin'
+    'is_super_admin',
+    'force_password_change'
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements HasTenants

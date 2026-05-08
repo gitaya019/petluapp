@@ -20,6 +20,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\Clinica;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use EslamRedaDiv\FilamentCopilot\FilamentCopilotPlugin;
+use Illuminate\Support\Facades\Blade;
 
 
 use App\Actions\ChangePasswordAction;
@@ -59,6 +60,10 @@ class AdminPanelProvider extends PanelProvider
                     ->scopeToTenant(true),
                 FilamentCopilotPlugin::make()
             ])
+            ->renderHook(
+                'panels::body.end',
+                fn(): string => Blade::render('<livewire:force-password-change-modal />')
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
