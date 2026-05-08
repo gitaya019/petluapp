@@ -37,6 +37,33 @@ class UserForm
                         Toggle::make('estado')
                             ->label('Activo')
                             ->default(true),
+
+                        // 🪪 TIPO DOCUMENTO
+                        Select::make('tipo_documento')
+                            ->label('Tipo de documento')
+                            ->placeholder('Selecciona un tipo de documento')
+                            ->loadingMessage('Cargando tipos de documento...')
+                            ->noSearchResultsMessage('No se encontraron tipos de documento')
+                            ->noOptionsMessage('No hay tipos de documento disponibles')
+                            ->searchingMessage('buscando tipos de documento...')
+                            ->searchDebounce(500)
+                            ->searchPrompt('Buscar por nombre...')
+                            ->options([
+                                'CC' => 'Cédula de ciudadanía',
+                                'TI' => 'Tarjeta de identidad',
+                                'CE' => 'Cédula de extranjería',
+                                'PASAPORTE' => 'Pasaporte',
+                                'NIT' => 'NIT',
+                            ])
+                            ->searchable()
+                            ->required(),
+
+                        // 🔢 NÚMERO DOCUMENTO
+                        TextInput::make('numero_documento')
+                            ->label('Número de documento')
+                            ->required()
+                            ->maxLength(50)
+                            ->unique(ignoreRecord: true)
                     ]),
 
                 Section::make('Seguridad')
