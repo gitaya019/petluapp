@@ -25,9 +25,11 @@ class LoteVacunaForm
                             ->noOptionsMessage('No hay vacunas disponibles')
                             ->searchingMessage('buscando vacunas...')
                             ->searchDebounce(500)
-                        ->searchPrompt('Buscar por nombre...')
+                            ->searchPrompt('Buscar por nombre...')
                             ->searchable()
-                            ->required(),
+                            ->required()
+                            ->preload()
+                            ->live(),
 
                         TextInput::make('numero_lote')
                             ->required(),
