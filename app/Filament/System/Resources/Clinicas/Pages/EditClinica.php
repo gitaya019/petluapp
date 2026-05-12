@@ -2,16 +2,16 @@
 
 namespace App\Filament\System\Resources\Clinicas\Pages;
 
-use App\Filament\System\Resources\Clinicas\ClinicaResource;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Actions\ForceDeleteAction;
 use Spatie\Permission\PermissionRegistrar;
-use App\Models\User;
-use App\Models\Role;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Filament\System\Resources\Clinicas\ClinicaResource;
 
 class EditClinica extends EditRecord
 {
@@ -20,9 +20,13 @@ class EditClinica extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+
             DeleteAction::make(),
+
             ForceDeleteAction::make(),
+
             RestoreAction::make(),
+
         ];
     }
 
@@ -36,35 +40,95 @@ class EditClinica extends EditRecord
         $authUser = Auth::user();
 
         $users = $this->data['users'] ?? [];
+
         $users[] = $authUser->id;
+
         $users = array_unique($users);
+
+        // =====================================================
+        // SINCRONIZAR USUARIOS
+        // =====================================================
 
         $this->record->users()->sync($users);
 
-        $role = \App\Models\Role::where('name', 'super_admin') //ignore error intelephense
+        // =====================================================
+        // CONFIGURAR TEAM
+        // =====================================================
+
+        $registrar = app(PermissionRegistrar::class);
+
+        $registrar->setPermissionsTeamId(
+            $this->record->id
+        );
+
+        $registrar->forgetCachedPermissions();
+
+        // =====================================================
+        // OBTENER ROL SUPER ADMIN
+        // =====================================================
+
+        $role = Role::query()
+
+            ->where('name', 'super_admin')
+
             ->where('clinica_id', $this->record->id)
+
             ->first();
 
-        if (! $role) return;
+        if (! $role) {
+            return;
+        }
 
-        \DB::transaction(function () use ($users, $role) { // ignore error intelephense
+        // =====================================================
+        // ACTUALIZAR ROLES
+        // =====================================================
 
-            \DB::table('model_has_roles')
-                ->where('model_type', \App\Models\User::class)
-                ->where('clinica_id', $this->record->id)
+        DB::transaction(function () use ($users, $role) {
+
+            DB::table('model_has_roles')
+
+                ->where(
+                    'model_type',
+                    User::class
+                )
+
+                ->where(
+                    'clinica_id',
+                    $this->record->id
+                )
+
+                ->where(
+                    'role_id',
+                    $role->id
+                )
+
                 ->delete();
 
             foreach ($users as $userId) {
-                \DB::table('model_has_roles')->updateOrInsert( //  ignore error intelephense
-                    [
-                        'role_id' => $role->id,
-                        'model_type' => \App\Models\User::class,
-                        'model_id' => $userId,
-                        'clinica_id' => $this->record->id,
-                    ],
-                    []
-                );
+
+                DB::table('model_has_roles')
+
+                    ->updateOrInsert(
+
+                        [
+                            'role_id' => $role->id,
+
+                            'model_type' => User::class,
+
+                            'model_id' => $userId,
+
+                            'clinica_id' => $this->record->id,
+                        ],
+
+                        []
+                    );
             }
         });
+
+        // =====================================================
+        // LIMPIAR CACHE
+        // =====================================================
+
+        $registrar->forgetCachedPermissions();
     }
 }
