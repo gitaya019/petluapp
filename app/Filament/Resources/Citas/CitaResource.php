@@ -16,9 +16,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Facades\Filament;
+use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
 
-class CitaResource extends Resource
+class CitaResource extends Resource implements CopilotResource
 {
     protected static ?string $model = Cita::class;
 
@@ -64,5 +65,33 @@ class CitaResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+
+    public static function copilotResourceDescription(): ?string
+    {
+        return '
+        Gestiona citas veterinarias.
+        Incluye mascotas, veterinarios,
+        vacunas, fechas, horas,
+        estados, motivos y observaciones.
+    ';
+    }
+
+    public static function copilotTools(): array
+    {
+        return [
+
+            new \App\Filament\Resources\Citas\CopilotTools\ListCitasTool(),
+
+            new \App\Filament\Resources\Citas\CopilotTools\BuscarCitasMascotaTool(),
+
+            new \App\Filament\Resources\Citas\CopilotTools\ViewCitaTool(),
+
+            new \App\Filament\Resources\Citas\CopilotTools\CitasHoyTool(),
+
+            new \App\Filament\Resources\Citas\CopilotTools\CitasPendientesTool(),
+
+        ];
     }
 }
