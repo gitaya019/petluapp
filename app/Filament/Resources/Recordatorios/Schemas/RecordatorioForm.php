@@ -219,6 +219,21 @@ class RecordatorioForm
                         // =========================
                         Select::make('estado')
                             ->label('Estado')
+                            ->placeholder('Selecciona un estado')
+
+                            ->loadingMessage('Cargando estados...')
+
+                            ->noSearchResultsMessage('No se encontraron estados')
+
+                            ->noOptionsMessage(
+                                'No hay estados disponibles'
+                            )
+
+                            ->searchingMessage('Buscando estados...')
+
+                            ->searchDebounce(500)
+
+                            ->searchPrompt('Buscar por nombre...')
 
                             ->options([
                                 'pendiente' => 'Pendiente',
