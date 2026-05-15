@@ -21,6 +21,11 @@ use EslamRedaDiv\FilamentCopilot\Models\CopilotAgentMemory;
 use EslamRedaDiv\FilamentCopilot\Models\CopilotRateLimit;
 use EslamRedaDiv\FilamentCopilot\Models\CopilotTokenUsage;
 
+use Spatie\Health\Facades\Health;
+use Spatie\Health\Checks\Checks\OptimizedAppCheck;
+use Spatie\Health\Checks\Checks\DebugModeCheck;
+use Spatie\Health\Checks\Checks\EnvironmentCheck;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -50,5 +55,11 @@ class AppServiceProvider extends ServiceProvider
         CopilotAgentMemory::observe(CopilotAgentMemoryObserver::class);
         CopilotRateLimit::observe(CopilotRateLimitObserver::class);
         CopilotTokenUsage::observe(CopilotTokenUsageObserver::class);
+
+        Health::checks([
+            OptimizedAppCheck::new(),
+            DebugModeCheck::new(),
+            EnvironmentCheck::new(),
+        ]);
     }
 }

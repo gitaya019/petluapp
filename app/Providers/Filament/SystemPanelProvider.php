@@ -21,6 +21,10 @@ use Illuminate\Support\Facades\Auth;
 use YusufGenc34\FilamentApiForge\FilamentApiForgePlugin;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
+use ShuvroRoy\FilamentSpatieLaravelHealth\FilamentSpatieLaravelHealthPlugin;
+use CmsMulti\FilamentClearCache\FilamentClearCachePlugin;
+
+
 
 class SystemPanelProvider extends PanelProvider
 {
@@ -53,7 +57,11 @@ class SystemPanelProvider extends PanelProvider
                 FilamentApiForgePlugin::make()
                     ->apiKeys()     // API key management
                     ->docs()        // API Docs + Access Control + Settings pages
-                    ->dashboard()   // Developer Center dashboard
+                    ->dashboard(),   // Developer Center dashboard
+
+                FilamentSpatieLaravelHealthPlugin::make(),
+                            FilamentClearCachePlugin::make(),
+
             ])
 
             ->discoverResources(in: app_path('Filament/System/Resources'), for: 'App\Filament\System\Resources')
