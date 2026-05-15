@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 use YusufGenc34\FilamentApiForge\FilamentApiForgePlugin;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
@@ -60,7 +61,8 @@ class SystemPanelProvider extends PanelProvider
                     ->dashboard(),   // Developer Center dashboard
 
                 FilamentSpatieLaravelHealthPlugin::make(),
-                            FilamentClearCachePlugin::make(),
+                FilamentClearCachePlugin::make()
+                    ->enabled(App::environment(['local', 'staging'])),
 
             ])
 
