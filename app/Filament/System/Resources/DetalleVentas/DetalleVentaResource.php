@@ -1,39 +1,37 @@
 <?php
 
-namespace App\Filament\System\Resources\Users;
+namespace App\Filament\System\Resources\DetalleVentas;
 
-use App\Filament\System\Resources\Users\Pages\CreateUser;
-use App\Filament\System\Resources\Users\Pages\EditUser;
-use App\Filament\System\Resources\Users\Pages\ListUsers;
-use App\Filament\System\Resources\Users\Schemas\UserForm;
-use App\Filament\System\Resources\Users\Tables\UsersTable;
-use App\Models\User;
+use App\Filament\System\Resources\DetalleVentas\Pages\CreateDetalleVenta;
+use App\Filament\System\Resources\DetalleVentas\Pages\EditDetalleVenta;
+use App\Filament\System\Resources\DetalleVentas\Pages\ListDetalleVentas;
+use App\Filament\System\Resources\DetalleVentas\Schemas\DetalleVentaForm;
+use App\Filament\System\Resources\DetalleVentas\Tables\DetalleVentasTable;
+use App\Models\DetalleVenta;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use YusufGenc34\FilamentApiForge\Contracts\HasApi;
 
 
-class UserResource extends Resource implements HasApi
+class DetalleVentaResource extends Resource implements HasApi
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = DetalleVenta::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserPlus;
+    protected static bool $shouldRegisterNavigation = false;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Administración';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
     {
-        return UserForm::configure($schema);
+        return DetalleVentaForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return UsersTable::configure($table);
+        return DetalleVentasTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -46,18 +44,10 @@ class UserResource extends Resource implements HasApi
     public static function getPages(): array
     {
         return [
-            'index' => ListUsers::route('/'),
-            'create' => CreateUser::route('/create'),
-            'edit' => EditUser::route('/{record}/edit'),
+            'index' => ListDetalleVentas::route('/'),
+            'create' => CreateDetalleVenta::route('/create'),
+            'edit' => EditDetalleVenta::route('/{record}/edit'),
         ];
-    }
-
-    public static function getRecordRouteBindingEloquentQuery(): Builder
-    {
-        return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 
     public static function apiConfig(): array

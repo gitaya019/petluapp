@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\System\Resources\Clinicas;
+namespace App\Filament\System\Resources\Mascotas;
 
-use App\Filament\System\Resources\Clinicas\Pages\CreateClinica;
-use App\Filament\System\Resources\Clinicas\Pages\EditClinica;
-use App\Filament\System\Resources\Clinicas\Pages\ListClinicas;
-use App\Filament\System\Resources\Clinicas\Schemas\ClinicaForm;
-use App\Filament\System\Resources\Clinicas\Tables\ClinicasTable;
-use App\Models\Clinica;
+use App\Filament\System\Resources\Mascotas\Pages\CreateMascota;
+use App\Filament\System\Resources\Mascotas\Pages\EditMascota;
+use App\Filament\System\Resources\Mascotas\Pages\ListMascotas;
+use App\Filament\System\Resources\Mascotas\Schemas\MascotaForm;
+use App\Filament\System\Resources\Mascotas\Tables\MascotasTable;
+use App\Models\Mascota;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,31 +18,37 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use YusufGenc34\FilamentApiForge\Contracts\HasApi;
 
 
-class ClinicaResource extends Resource implements HasApi
+class MascotaResource extends Resource implements HasApi
 {
-    protected static ?string $model = Clinica::class;
+    protected static ?string $model = Mascota::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
+    protected static bool $shouldRegisterNavigation = false;
 
-
-    protected static string | \UnitEnum | null $navigationGroup = 'Administración';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
     {
-        return ClinicaForm::configure($schema);
+        return MascotaForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return ClinicasTable::configure($table);
+        return MascotasTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListClinicas::route('/'),
-            'create' => CreateClinica::route('/create'),
-            'edit' => EditClinica::route('/{record}/edit'),
+            'index' => ListMascotas::route('/'),
+            'create' => CreateMascota::route('/create'),
+            'edit' => EditMascota::route('/{record}/edit'),
         ];
     }
 

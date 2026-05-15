@@ -1,39 +1,37 @@
 <?php
 
-namespace App\Filament\System\Resources\Users;
+namespace App\Filament\System\Resources\LoteVacunas;
 
-use App\Filament\System\Resources\Users\Pages\CreateUser;
-use App\Filament\System\Resources\Users\Pages\EditUser;
-use App\Filament\System\Resources\Users\Pages\ListUsers;
-use App\Filament\System\Resources\Users\Schemas\UserForm;
-use App\Filament\System\Resources\Users\Tables\UsersTable;
-use App\Models\User;
+use App\Filament\System\Resources\LoteVacunas\Pages\CreateLoteVacuna;
+use App\Filament\System\Resources\LoteVacunas\Pages\EditLoteVacuna;
+use App\Filament\System\Resources\LoteVacunas\Pages\ListLoteVacunas;
+use App\Filament\System\Resources\LoteVacunas\Schemas\LoteVacunaForm;
+use App\Filament\System\Resources\LoteVacunas\Tables\LoteVacunasTable;
+use App\Models\LoteVacuna;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use YusufGenc34\FilamentApiForge\Contracts\HasApi;
 
 
-class UserResource extends Resource implements HasApi
+class LoteVacunaResource extends Resource implements HasApi
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = LoteVacuna::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserPlus;
+    protected static bool $shouldRegisterNavigation = false;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Administración';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
     {
-        return UserForm::configure($schema);
+        return LoteVacunaForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return UsersTable::configure($table);
+        return LoteVacunasTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -46,18 +44,10 @@ class UserResource extends Resource implements HasApi
     public static function getPages(): array
     {
         return [
-            'index' => ListUsers::route('/'),
-            'create' => CreateUser::route('/create'),
-            'edit' => EditUser::route('/{record}/edit'),
+            'index' => ListLoteVacunas::route('/'),
+            'create' => CreateLoteVacuna::route('/create'),
+            'edit' => EditLoteVacuna::route('/{record}/edit'),
         ];
-    }
-
-    public static function getRecordRouteBindingEloquentQuery(): Builder
-    {
-        return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 
     public static function apiConfig(): array

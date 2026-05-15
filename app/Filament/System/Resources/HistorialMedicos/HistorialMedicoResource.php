@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\System\Resources\Clinicas;
+namespace App\Filament\System\Resources\HistorialMedicos;
 
-use App\Filament\System\Resources\Clinicas\Pages\CreateClinica;
-use App\Filament\System\Resources\Clinicas\Pages\EditClinica;
-use App\Filament\System\Resources\Clinicas\Pages\ListClinicas;
-use App\Filament\System\Resources\Clinicas\Schemas\ClinicaForm;
-use App\Filament\System\Resources\Clinicas\Tables\ClinicasTable;
-use App\Models\Clinica;
+use App\Filament\System\Resources\HistorialMedicos\Pages\CreateHistorialMedico;
+use App\Filament\System\Resources\HistorialMedicos\Pages\EditHistorialMedico;
+use App\Filament\System\Resources\HistorialMedicos\Pages\ListHistorialMedicos;
+use App\Filament\System\Resources\HistorialMedicos\Schemas\HistorialMedicoForm;
+use App\Filament\System\Resources\HistorialMedicos\Tables\HistorialMedicosTable;
+use App\Models\HistorialMedico;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,31 +18,37 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use YusufGenc34\FilamentApiForge\Contracts\HasApi;
 
 
-class ClinicaResource extends Resource implements HasApi
+class HistorialMedicoResource extends Resource implements HasApi
 {
-    protected static ?string $model = Clinica::class;
+    protected static ?string $model = HistorialMedico::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
+    protected static bool $shouldRegisterNavigation = false;
 
-
-    protected static string | \UnitEnum | null $navigationGroup = 'Administración';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
     {
-        return ClinicaForm::configure($schema);
+        return HistorialMedicoForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return ClinicasTable::configure($table);
+        return HistorialMedicosTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListClinicas::route('/'),
-            'create' => CreateClinica::route('/create'),
-            'edit' => EditClinica::route('/{record}/edit'),
+            'index' => ListHistorialMedicos::route('/'),
+            'create' => CreateHistorialMedico::route('/create'),
+            'edit' => EditHistorialMedico::route('/{record}/edit'),
         ];
     }
 
