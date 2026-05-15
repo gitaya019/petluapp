@@ -20,6 +20,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
 use YusufGenc34\FilamentApiForge\FilamentApiForgePlugin;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
 
 class SystemPanelProvider extends PanelProvider
 {
@@ -33,12 +34,28 @@ class SystemPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Red,
             ])
-            ->plugin(
+
+            ->plugins([
+                FilamentLogViewer::make()
+                    ->navigationGroup('System')
+                    ->navigationLabel('Logs')
+                    ->navigationIcon('heroicon-o-document-text')
+                    ->navigationSort(10)
+                    ->authorize(fn() => Auth::check())
+                    ->registerNavigation(true)
+                    ->navigationGroup('System')
+                    ->navigationIcon('heroicon-o-document-text')
+                    ->navigationLabel('Log Viewer')
+                    ->navigationSort(10)
+                    ->navigationUrl('/logs')
+                    ->pollingTime(null), // Set to null to disable polling,
+
                 FilamentApiForgePlugin::make()
                     ->apiKeys()     // API key management
                     ->docs()        // API Docs + Access Control + Settings pages
                     ->dashboard()   // Developer Center dashboard
-            )
+            ])
+
             ->discoverResources(in: app_path('Filament/System/Resources'), for: 'App\Filament\System\Resources')
             ->discoverPages(in: app_path('Filament/System/Pages'), for: 'App\Filament\System\Pages')
             ->pages([
