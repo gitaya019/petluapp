@@ -25,6 +25,9 @@ use Spatie\Health\Facades\Health;
 use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Checks\Checks\DebugModeCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
+use Spatie\Health\Checks\Checks\DatabaseCheck;
+use Spatie\Health\Checks\Checks\QueueCheck;
+use Spatie\Health\Checks\Checks\DatabaseSizeCheck;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -60,6 +63,9 @@ class AppServiceProvider extends ServiceProvider
             OptimizedAppCheck::new(),
             DebugModeCheck::new(),
             EnvironmentCheck::new(),
+            DatabaseCheck::new(),
+            QueueCheck::new(),
+            DatabaseSizeCheck::new(),
         ]);
     }
 }
