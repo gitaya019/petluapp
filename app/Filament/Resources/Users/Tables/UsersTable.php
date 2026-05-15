@@ -21,8 +21,8 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')->searchable()->icon('heroicon-o-user'),
-                TextColumn::make('email'),
-                TextColumn::make('telefono'),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('telefono')->searchable(),
                 IconColumn::make('estado')->boolean(),
             ])
             ->filters([

@@ -18,8 +18,8 @@ class HistorialMedicosTable
     {
         return $table
             ->columns([
-                TextColumn::make('mascota.nombre'),
-                TextColumn::make('veterinario.name'),
+                TextColumn::make('mascota.nombre')->searchable(),
+                TextColumn::make('veterinario.name')->searchable(),
                 TextColumn::make('fecha')->date(),
             ])
             ->filters([

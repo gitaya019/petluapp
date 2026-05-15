@@ -19,7 +19,8 @@ class LoteVacunasTable
                     ->label('Vacuna')
                     ->searchable(),
 
-                TextColumn::make('numero_lote'),
+                TextColumn::make('numero_lote')
+                    ->searchable(),
 
                 TextColumn::make('fecha_vencimiento')
                     ->date('d M Y')

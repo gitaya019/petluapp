@@ -14,8 +14,8 @@ class MovimientoStocksTable
     {
         return $table
             ->columns([
-                TextColumn::make('lote.numero_lote')->label('Lote'),
-                TextColumn::make('tipo'),
+                TextColumn::make('lote.numero_lote')->label('Lote')->searchable(),
+                TextColumn::make('tipo')->searchable(),
                 TextColumn::make('cantidad'),
                 TextColumn::make('fecha')->date(),
             ])

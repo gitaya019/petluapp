@@ -30,10 +30,12 @@ class VacunaAplicadasTable
             })
             ->columns([
                 TextColumn::make('mascota.nombre')
-                    ->label('Mascota'),
+                    ->label('Mascota')
+                    ->searchable(),
 
                 TextColumn::make('vacuna.nombre')
-                    ->label('Vacuna'),
+                    ->label('Vacuna')
+                    ->searchable(),
 
                 // 🟢 DOSIS
                 TextColumn::make('dosis')
@@ -228,7 +230,7 @@ class VacunaAplicadasTable
                     ->modalCancelActionLabel('Cerrar')
                     ->modalContent(function ($record) {
 
-                        $historial = VacunaAplicada::where('mascota_id', $record->mascota_id)
+                        $historial = VacunaAplicada::where('mascota_id', $record->mascota_id) //ignore this error is intelephense
                             ->where('vacuna_id', $record->vacuna_id)
                             ->orderBy('fecha_aplicacion')
                             ->get();
