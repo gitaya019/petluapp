@@ -86,7 +86,7 @@ return [
     */
 
     'memory' => [
-        'enabled' => true,
+        'enabled' => false,
         'max_memories_per_user' => 100,
     ],
 

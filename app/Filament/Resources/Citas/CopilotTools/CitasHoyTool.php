@@ -16,7 +16,10 @@ class CitasHoyTool extends BaseTool
 
     public function schema(JsonSchema $schema): array
     {
-        return [];
+        return [
+            'type' => 'object',
+            'properties' => [],
+        ];
     }
 
     public function handle(Request $request): string

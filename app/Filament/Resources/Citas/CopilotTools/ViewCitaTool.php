@@ -17,13 +17,20 @@ class ViewCitaTool extends BaseTool
     public function schema(JsonSchema $schema): array
     {
         return [
+            'type' => 'object',
 
-            'id' => $schema->integer()
-                ->description('ID de la cita'),
+            'properties' => [
 
+                'user_id' => [
+                    'type' => 'integer',
+                    'description' => 'ID del usuario',
+                ],
+
+            ],
+
+            'required' => ['user_id'],
         ];
     }
-
     public function handle(Request $request): string
     {
         $id = $request->input('id');

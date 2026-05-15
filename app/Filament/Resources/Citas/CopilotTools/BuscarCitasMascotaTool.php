@@ -17,10 +17,18 @@ class BuscarCitasMascotaTool extends BaseTool
     public function schema(JsonSchema $schema): array
     {
         return [
+            'type' => 'object',
 
-            'mascota' => $schema->string()
-                ->description('Nombre de la mascota'),
+            'properties' => [
 
+                'mascota' => [
+                    'type' => 'string',
+                    'description' => 'Nombre de la mascota',
+                ],
+
+            ],
+
+            'required' => ['mascota'],
         ];
     }
 
