@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
+use YusufGenc34\FilamentApiForge\FilamentApiForgePlugin;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class SystemPanelProvider extends PanelProvider
@@ -32,6 +33,12 @@ class SystemPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Red,
             ])
+            ->plugin(
+                FilamentApiForgePlugin::make()
+                    ->apiKeys()     // API key management
+                    ->docs()        // API Docs + Access Control + Settings pages
+                    ->dashboard()   // Developer Center dashboard
+            )
             ->discoverResources(in: app_path('Filament/System/Resources'), for: 'App\Filament\System\Resources')
             ->discoverPages(in: app_path('Filament/System/Pages'), for: 'App\Filament\System\Pages')
             ->pages([

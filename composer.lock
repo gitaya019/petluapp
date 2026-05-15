@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "557ef2aa693b309c42581ce9b80e6af7",
+    "content-hash": "4bb20cd32f41cec1db41a0c6f8b8dfc1",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -5820,6 +5820,80 @@
             "time": "2026-04-29T07:59:45+00:00"
         },
         {
+            "name": "spatie/laravel-query-builder",
+            "version": "6.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-query-builder.git",
+                "reference": "ab9c4c369fc913d6c020a0f6776f3c82f3e523fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-query-builder/zipball/ab9c4c369fc913d6c020a0f6776f3c82f3e523fb",
+                "reference": "ab9c4c369fc913d6c020a0f6776f3c82f3e523fb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^10.0|^11.0|^12.0|^13.0",
+                "illuminate/http": "^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.11"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "larastan/larastan": "^2.7 || ^3.3",
+                "mockery/mockery": "^1.4",
+                "orchestra/testbench": "^7.0|^8.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.7|^4.0",
+                "phpunit/phpunit": "^10.0|^11.5.3|^12.0",
+                "spatie/invade": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\QueryBuilder\\QueryBuilderServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\QueryBuilder\\": "src",
+                    "Spatie\\QueryBuilder\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Vanderbist",
+                    "email": "alex@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Easily build Eloquent queries from API requests",
+            "homepage": "https://github.com/spatie/laravel-query-builder",
+            "keywords": [
+                "laravel-query-builder",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-query-builder/issues",
+                "source": "https://github.com/spatie/laravel-query-builder"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2026-03-08T13:45:05+00:00"
+        },
+        {
             "name": "spatie/shiki-php",
             "version": "2.4.0",
             "source": {
@@ -8898,6 +8972,74 @@
                 }
             ],
             "time": "2026-04-26T05:33:54+00:00"
+        },
+        {
+            "name": "yusufgenc/filament-api-forge",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yusufgenc34/filament-api-forge.git",
+                "reference": "bc4f5151b8695f98e8d0302d007300e656adcb9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yusufgenc34/filament-api-forge/zipball/bc4f5151b8695f98e8d0302d007300e656adcb9a",
+                "reference": "bc4f5151b8695f98e8d0302d007300e656adcb9a",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^5.0",
+                "illuminate/contracts": "^12.0|^13.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16",
+                "spatie/laravel-query-builder": "^5.0|^6.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^9.0|^10.0",
+                "pestphp/pest": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0",
+                "phpunit/phpunit": "^11.0|^12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "YusufGenc34\\FilamentApiForge\\FilamentApiForgeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "YusufGenc34\\FilamentApiForge\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yusuf Genc",
+                    "email": "theyusufgenc@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Automatically expose your Filament Resources as fully-featured REST APIs with authentication, documentation, rate limiting and query builder support.",
+            "homepage": "https://github.com/yusufgenc34/filament-api-forge",
+            "keywords": [
+                "api",
+                "filament",
+                "filament-plugin",
+                "laravel",
+                "openapi",
+                "query-builder",
+                "rest"
+            ],
+            "support": {
+                "issues": "https://github.com/yusufgenc34/filament-api-forge/issues",
+                "source": "https://github.com/yusufgenc34/filament-api-forge/tree/v1.1.0"
+            },
+            "time": "2026-05-11T13:47:29+00:00"
         }
     ],
     "packages-dev": [
