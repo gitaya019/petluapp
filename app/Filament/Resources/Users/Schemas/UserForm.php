@@ -10,7 +10,7 @@ use Filament\Schemas\Schema;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Str;
 
 class UserForm
 {
@@ -20,14 +20,25 @@ class UserForm
             Section::make('Datos del Usuario')
                 ->icon('heroicon-o-user')
                 ->schema([
-                    TextInput::make('name')->required(),
-                    TextInput::make('email')->email()->required(),
+                    TextInput::make('name')
+                        ->required(),
+
+                    TextInput::make('email')
+                        ->email()
+                        ->required(),
+
+                    // 🔐 CONTRASEÑA ALEATORIA
                     TextInput::make('password')
-                        ->label('Contraseña')
-                        ->password()
-                        ->required(fn(string $operation) => $operation === 'create')
-                        ->hidden(fn(string $operation) => $operation === 'edit'),
+                        ->label('Contraseña generada')
+                        ->default(fn() => Str::random(10))
+                        ->password(false)
+                        ->readOnly()
+                        ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                        ->visible(fn($record) => $record === null)
+                        ->helperText('Copia esta contraseña y compártela con el usuario'),
+
                     TextInput::make('numero_documento'),
+
                     Select::make('tipo_documento')
                         ->placeholder('Selecciona un tipo de documento')
                         ->loadingMessage('Cargando tipos de documento...')
@@ -39,7 +50,9 @@ class UserForm
                         ->default('CC'),
 
                     TextInput::make('telefono'),
-                    Toggle::make('estado')->default(true),
+
+                    Toggle::make('estado')
+                        ->default(true),
 
                     Select::make('roles')
                         ->label('Roles')
@@ -54,15 +67,13 @@ class UserForm
                             name: 'roles',
                             titleAttribute: 'name',
                             modifyQueryUsing: fn($query) =>
-                            $query->where('roles.clinica_id', Filament::getTenant()?->id)
+                                $query->where('roles.clinica_id', Filament::getTenant()?->id)
                         )
                         ->saveRelationshipsUsing(function (Model $record, $state) {
 
-                            // 🔥 SETEAR TENANT (CLAVE)
                             app(\Spatie\Permission\PermissionRegistrar::class)
                                 ->setPermissionsTeamId(Filament::getTenant()?->id);
 
-                            // 🔥 GUARDAR CON clinica_id
                             $record->roles()->syncWithPivotValues(
                                 $state,
                                 [config('permission.column_names.team_foreign_key') => Filament::getTenant()?->id]
@@ -71,6 +82,7 @@ class UserForm
                         ->multiple()
                         ->preload()
                         ->searchable()
+
                 ])->columns(2),
         ]);
     }
