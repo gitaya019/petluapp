@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+            ->favicon(asset('images/logo_aerografia.svg'))
             ->userMenuItems([
                 ChangePasswordAction::make(),
             ])

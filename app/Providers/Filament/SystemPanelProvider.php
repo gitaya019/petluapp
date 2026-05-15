@@ -23,8 +23,6 @@ use YusufGenc34\FilamentApiForge\FilamentApiForgePlugin;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use ShuvroRoy\FilamentSpatieLaravelHealth\FilamentSpatieLaravelHealthPlugin;
-use CmsMulti\FilamentClearCache\FilamentClearCachePlugin;
-
 
 
 class SystemPanelProvider extends PanelProvider
@@ -36,6 +34,7 @@ class SystemPanelProvider extends PanelProvider
             ->path('system')
             ->brandName('PetluApp Center')
             ->login()
+            ->favicon(asset('images/logo_ruby.svg'))
             ->colors([
                 'primary' => Color::Red,
             ])
@@ -61,9 +60,6 @@ class SystemPanelProvider extends PanelProvider
                     ->dashboard(),   // Developer Center dashboard
 
                 FilamentSpatieLaravelHealthPlugin::make(),
-                FilamentClearCachePlugin::make()
-                    ->enabled(App::environment(['local', 'staging'])),
-
             ])
 
             ->discoverResources(in: app_path('Filament/System/Resources'), for: 'App\Filament\System\Resources')

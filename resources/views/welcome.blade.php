@@ -15,6 +15,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
+    <!-- Estilos personalizados -->
+
+    <link rel="icon" href="{{ asset('images/logo_aerografia.svg') }}" type="image/svg+xml">
+    
     <style>
         body {
             font-family: 'Outfit', sans-serif;
