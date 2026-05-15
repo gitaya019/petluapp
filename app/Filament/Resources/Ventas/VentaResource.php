@@ -61,7 +61,6 @@ class VentaResource extends Resource implements CopilotResource
         return [
             new \App\Filament\Resources\Ventas\CopilotTools\ListVentasTool(),
             new \App\Filament\Resources\Ventas\CopilotTools\VentasHoyTool(),
-            new \App\Filament\Resources\Ventas\CopilotTools\VentasMesTool(),
         ];
     }
 }
