@@ -55,10 +55,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
-                    ->navigationGroup('Seguridad') // opcional
+                    ->navigationGroup('Seguridad')
                     ->navigationIcon('heroicon-o-shield-check')
                     ->scopeToTenant(true),
-                FilamentCopilotPlugin::make()
             ])
             ->renderHook(
                 'panels::body.end',
