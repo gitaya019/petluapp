@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use EslamRedaDiv\FilamentCopilot\Concerns\HasCopilotChat;
+use Laravel\Sanctum\HasApiTokens;
+
 
 
 #[Fillable([
@@ -32,7 +34,7 @@ use EslamRedaDiv\FilamentCopilot\Concerns\HasCopilotChat;
 class User extends Authenticatable implements HasTenants
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasRoles, HasCopilotChat;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles, HasCopilotChat , HasApiTokens;
 
     /**
      * Casts
