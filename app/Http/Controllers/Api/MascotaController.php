@@ -20,8 +20,8 @@ class MascotaController extends Controller
             'user_id',
             $request->user()->id
         )
-        ->latest()
-        ->get();
+            ->latest()
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -133,6 +133,56 @@ class MascotaController extends Controller
             'success' => true,
             'message' => 'Mascota actualizada correctamente',
             'data' => $mascota,
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Historiales de una mascota
+    |--------------------------------------------------------------------------
+    */
+
+    public function historiales(
+        Request $request,
+        Mascota $mascota
+    ) {
+
+        // VALIDAR DUEÑO
+
+        if (
+            $mascota->user_id !==
+            $request->user()->id
+        ) {
+
+            return response()->json([
+
+                'success' => false,
+
+                'message' => 'No autorizado',
+            ], 403);
+        }
+
+        $historiales = $mascota
+            ->historiales()
+
+            ->with([
+
+                'mascota:id,nombre',
+
+                'veterinario:id,name',
+
+                'clinica:id,nombre',
+            ])
+
+            ->latest()
+
+            ->get();
+
+        return response()->json([
+
+            'success' => true,
+
+            'data' => $historiales,
         ]);
     }
 

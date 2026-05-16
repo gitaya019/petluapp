@@ -10,27 +10,27 @@ use App\Http\Controllers\Api\RecordatorioController;
 use App\Http\Controllers\Api\VentaController;
 use App\Http\Controllers\Api\HistorialMedicoController;
 
-    /*
+/*
     |--------------------------------------------------------------------------
     | Autenticación
     |--------------------------------------------------------------------------
     */
 
-    Route::post('/login', [
-        AuthController::class,
-        'login'
-    ]);
+Route::post('/login', [
+    AuthController::class,
+    'login'
+]);
 
-    /*
+/*
     |--------------------------------------------------------------------------
     | Rutas protegidas
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware('auth:sanctum')
-        ->group(function () {
+Route::middleware('auth:sanctum')
+    ->group(function () {
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Usuario autenticado
     |--------------------------------------------------------------------------
@@ -63,6 +63,15 @@ use App\Http\Controllers\Api\HistorialMedicoController;
             MascotaController::class,
             'show',
         ]);
+
+
+        Route::get(
+
+            'mascotas/{mascota}/historiales',
+
+            [MascotaController::class, 'historiales']
+
+        );
 
         /*
     |--------------------------------------------------------------------------
@@ -111,20 +120,4 @@ use App\Http\Controllers\Api\HistorialMedicoController;
             VentaController::class,
             'show',
         ]);
-
-    /*
-    |--------------------------------------------------------------------------
-    | Historiales Médicos
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('/historiales-medicos', [
-        HistorialMedicoController::class,
-        'index',
-    ]);
-
-    Route::get('/historiales-medicos/{historialMedico}', [
-        HistorialMedicoController::class,
-        'show',
-    ]);
     });

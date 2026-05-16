@@ -40,4 +40,12 @@ class Mascota extends Model
     {
         return $this->hasMany(Cita::class);
     }
+
+    public function historiales()
+    {
+        return $this->hasMany(
+            HistorialMedico::class,
+            'mascota_id'
+        );
+    }
 }
