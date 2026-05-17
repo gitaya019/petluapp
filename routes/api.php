@@ -3,13 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+
+use App\Models\User;
+use App\Models\UserOtp;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
+
+
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MascotaController;
 use App\Http\Controllers\Api\CitaController;
 use App\Http\Controllers\Api\RecordatorioController;
 use App\Http\Controllers\Api\VentaController;
-use App\Http\Controllers\Api\HistorialMedicoController;
-
 /*
     |--------------------------------------------------------------------------
     | Autenticación
@@ -125,19 +130,29 @@ Route::middleware('auth:sanctum')
 
 /*Endpoint para enviar OTP*/
 
-use App\Models\User;
-use App\Models\UserOtp;
-use Illuminate\Support\Facades\Mail;
 
 Route::post('/otp/send', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
+    $request->validate([
+        'email' => 'required|email',
+    ]);
 
+    // Buscar usuario
     $user = User::where('email', $request->email)->first();
     if (!$user) {
         return response()->json(['message' => 'Usuario no encontrado'], 404);
     }
 
-    $otp = rand(100000, 999999); // OTP de 6 dígitos
+    // Rate limit: 1 OTP cada 60 segundos
+    $cacheKey = 'otp_send_' . $user->id;
+    if (Cache::has($cacheKey)) {
+        $seconds = Cache::get($cacheKey) - time();
+        return response()->json([
+            'message' => "Espera $seconds segundos antes de solicitar otro OTP"
+        ], 429);
+    }
+
+    // Generar OTP de 6 dígitos y expiración
+    $otp = rand(100000, 999999);
     $expiresAt = now()->addMinutes(10);
 
     UserOtp::create([
@@ -146,10 +161,22 @@ Route::post('/otp/send', function (Request $request) {
         'expires_at' => $expiresAt,
     ]);
 
-    // Enviar OTP por correo
-    Mail::raw("Tu código OTP es: $otp", function ($message) use ($user) {
+    // Bloquear nuevo envío durante 60 segundos
+    Cache::put($cacheKey, time() + 60, 60);
+
+    // Enviar OTP por correo con HTML
+    Mail::html("
+        <div style='font-family: sans-serif; text-align:center; padding: 20px; background: #f4f4f4; border-radius: 12px;'>
+            <h2 style='color: #6A4C93;'>¡Hola!</h2>
+            <p style='font-size: 16px; color: #333;'>Tu código de acceso OTP para <strong>PetluApp</strong> es:</p>
+            <div style='font-size: 32px; font-weight: bold; color: #2DB7A3; margin: 20px 0;'>$otp</div>
+            <p style='font-size: 14px; color: #555;'>Este código expira en 10 minutos.</p>
+            <hr style='margin:20px 0;'/>
+            <p style='font-size:12px; color:#999;'>Si no solicitaste este código, ignora este correo.</p>
+        </div>
+    ", function ($message) use ($user) {
         $message->to($user->email)
-            ->subject('Código OTP de acceso');
+                ->subject('🚀 Código OTP de acceso PetluApp');
     });
 
     return response()->json(['message' => 'OTP enviado']);
@@ -159,7 +186,7 @@ Route::post('/otp/send', function (Request $request) {
 /*Endpoint para verificar OTP y generar token*/
 
 
-Route::post('/otp/verify', function(Request $request) {
+Route::post('/otp/verify', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
         'otp' => 'required|digits:6',
