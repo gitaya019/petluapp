@@ -13,9 +13,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
-class VacunaResource extends Resource implements CopilotResource
+class VacunaResource extends Resource
 {
     protected static ?string $model = Vacuna::class;
 
@@ -54,14 +53,5 @@ class VacunaResource extends Resource implements CopilotResource
             Controla stock, fechas de vencimiento,
             lotes y disponibilidad.
         ';
-    }
-
-    public static function copilotTools(): array
-    {
-        return [
-            new \App\Filament\Resources\Vacunas\CopilotTools\ListVacunasTool(),
-            new \App\Filament\Resources\Vacunas\CopilotTools\SearchVacunasTool(),
-            new \App\Filament\Resources\Vacunas\CopilotTools\VacunasVencidasTool(),
-        ];
     }
 }

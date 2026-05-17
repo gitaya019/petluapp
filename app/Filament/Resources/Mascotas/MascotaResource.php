@@ -15,9 +15,8 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
-class MascotaResource extends Resource implements CopilotResource
+class MascotaResource extends Resource
 {
     protected static ?string $model = Mascota::class;
 
@@ -64,12 +63,4 @@ class MascotaResource extends Resource implements CopilotResource
         ';
     }
 
-    public static function copilotTools(): array
-    {
-        return [
-            new \App\Filament\Resources\Mascotas\CopilotTools\ListMascotasTool(),
-            new \App\Filament\Resources\Mascotas\CopilotTools\SearchMascotasTool(),
-            new \App\Filament\Resources\Mascotas\CopilotTools\ViewMascotaTool(),
-        ];
-    }
 }

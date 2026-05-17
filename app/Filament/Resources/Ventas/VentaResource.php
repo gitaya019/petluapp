@@ -13,9 +13,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
-class VentaResource extends Resource implements CopilotResource
+class VentaResource extends Resource
 {
     protected static ?string $model = Venta::class;
 
@@ -56,11 +55,4 @@ class VentaResource extends Resource implements CopilotResource
         ';
     }
 
-    public static function copilotTools(): array
-    {
-        return [
-            new \App\Filament\Resources\Ventas\CopilotTools\ListVentasTool(),
-            new \App\Filament\Resources\Ventas\CopilotTools\VentasHoyTool(),
-        ];
-    }
 }

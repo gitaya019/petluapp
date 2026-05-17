@@ -15,9 +15,8 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
-class UserResource extends Resource implements CopilotResource
+class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
@@ -66,11 +65,4 @@ class UserResource extends Resource implements CopilotResource
         ';
     }
 
-    public static function copilotTools(): array
-    {
-        return [
-            new \App\Filament\Resources\Users\CopilotTools\ListUsersTool(),
-            new \App\Filament\Resources\Users\CopilotTools\SearchUsersTool(),
-        ];
-    }
 }

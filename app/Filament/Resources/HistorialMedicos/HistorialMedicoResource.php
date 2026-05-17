@@ -13,9 +13,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 
-class HistorialMedicoResource extends Resource implements CopilotResource
+class HistorialMedicoResource extends Resource
 {
     protected static ?string $model = HistorialMedico::class;
 
@@ -56,16 +55,4 @@ class HistorialMedicoResource extends Resource implements CopilotResource
         ';
     }
 
-    public static function copilotTools(): array
-    {
-        return [
-
-            new \App\Filament\Resources\HistorialMedicos\CopilotTools\ListHistorialMedicosTool(),
-
-            new \App\Filament\Resources\HistorialMedicos\CopilotTools\BuscarHistorialMascotaTool(),
-
-            new \App\Filament\Resources\HistorialMedicos\CopilotTools\ViewHistorialMedicoTool(),
-
-        ];
-    }
 }
