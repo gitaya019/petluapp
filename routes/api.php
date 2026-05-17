@@ -121,3 +121,66 @@ Route::middleware('auth:sanctum')
             'show',
         ]);
     });
+
+
+/*Endpoint para enviar OTP*/
+
+use App\Models\User;
+use App\Models\UserOtp;
+use Illuminate\Support\Facades\Mail;
+
+Route::post('/otp/send', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $user = User::where('email', $request->email)->first();
+    if (!$user) {
+        return response()->json(['message' => 'Usuario no encontrado'], 404);
+    }
+
+    $otp = rand(100000, 999999); // OTP de 6 dígitos
+    $expiresAt = now()->addMinutes(10);
+
+    UserOtp::create([
+        'user_id' => $user->id,
+        'otp' => $otp,
+        'expires_at' => $expiresAt,
+    ]);
+
+    // Enviar OTP por correo
+    Mail::raw("Tu código OTP es: $otp", function ($message) use ($user) {
+        $message->to($user->email)
+            ->subject('Código OTP de acceso');
+    });
+
+    return response()->json(['message' => 'OTP enviado']);
+});
+
+
+/*Endpoint para verificar OTP y generar token*/
+
+
+Route::post('/otp/verify', function(Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'otp' => 'required|digits:6',
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+    if (!$user) {
+        return response()->json(['message' => 'Usuario no encontrado'], 404);
+    }
+
+    $otp = $user->otps()->latest()->first();
+
+    if (!$otp || $otp->otp !== $request->otp || $otp->isExpired()) {
+        return response()->json(['message' => 'OTP inválido o expirado'], 401);
+    }
+
+    // Eliminar OTP usado
+    $otp->delete();
+
+    // Generar token (usando sanctum o JWT)
+    $token = $user->createToken('app-token')->plainTextToken;
+
+    return response()->json(['token' => $token, 'user' => $user]);
+});

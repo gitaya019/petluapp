@@ -34,7 +34,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements HasTenants
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasRoles, HasCopilotChat , HasApiTokens;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles, HasCopilotChat, HasApiTokens;
 
     /**
      * Casts
@@ -100,5 +100,11 @@ class User extends Authenticatable implements HasTenants
     public function isSuperAdmin(): bool
     {
         return $this->is_super_admin;
+    }
+
+
+    public function otps()
+    {
+        return $this->hasMany(UserOtp::class);
     }
 }
