@@ -15,6 +15,7 @@
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^3.0",
+        "livewire/volt": "^1.10",
         "shuvroroy/filament-spatie-laravel-health": "^3.3",
         "yusufgenc/filament-api-forge": "^1.1"
     },
