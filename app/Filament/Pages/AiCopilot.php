@@ -269,4 +269,17 @@ class AiCopilot extends Page
 
         $this->loading = false;
     }
+
+    /**
+     * Enviar una sugerencia predefinida
+     */
+    public function sendSuggestion(string $suggestion): void
+    {
+        $this->message = $suggestion;
+        $this->send(
+            app(AdminAgent::class), 
+            app(ExecuteAction::class), 
+            app(ResultFormatter::class)
+        );
+    }
 }
