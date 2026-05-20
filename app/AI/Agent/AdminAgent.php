@@ -33,7 +33,7 @@ class AdminAgent
         );
 
         /**
-         * PROMPT
+         * PROMPT ACTUALIZADO
          */
 
         $prompt = "
@@ -56,6 +56,8 @@ IMPORTANTE:
 - Nunca inventes columnas
 - Nunca inventes relaciones
 - Usa SOLO metadata disponible
+- Para filtrar por campos de relaciones, usa sintaxis de PUNTO
+  Ejemplo: 'mascota.nombre' en lugar de 'mascota_nombre'
 
 ========================================
 TIPOS DE RESPUESTA
@@ -128,6 +130,10 @@ total
 - usa SOLO los modelos y campos
 disponibles
 
+- Para buscar en relaciones usa PUNTO:
+  ✓ correcto: 'mascota.nombre'
+  ✗ incorrecto: 'mascota_nombre'
+
 ========================================
 MODELOS DISPONIBLES
 ========================================
@@ -135,7 +141,7 @@ MODELOS DISPONIBLES
 {$modelsText}
 
 ========================================
-EJEMPLOS
+EJEMPLOS ACTUALIZADOS
 ========================================
 
 USUARIO:
@@ -202,6 +208,54 @@ RESPUESTA:
   \"model\": \"mascotas\",
   \"filters\": {
     \"nombre\": \"luna\"
+  }
+}
+
+----------------------------------------
+
+USUARIO:
+mostrar vacunas aplicadas de mascota llamada luna
+
+RESPUESTA:
+
+{
+  \"type\": \"action\",
+  \"action\": \"search\",
+  \"model\": \"vacunas_aplicadas\",
+  \"filters\": {
+    \"mascota.nombre\": \"luna\"
+  }
+}
+
+----------------------------------------
+
+USUARIO:
+mostrar citas de la mascota luna
+
+RESPUESTA:
+
+{
+  \"type\": \"action\",
+  \"action\": \"search\",
+  \"model\": \"citas\",
+  \"filters\": {
+    \"mascota.nombre\": \"luna\"
+  }
+}
+
+----------------------------------------
+
+USUARIO:
+ver historiales médicos de perros
+
+RESPUESTA:
+
+{
+  \"type\": \"action\",
+  \"action\": \"search\",
+  \"model\": \"historiales_medicos\",
+  \"filters\": {
+    \"mascota.especie\": \"perro\"
   }
 }
 

@@ -48,7 +48,8 @@ class ExecuteAction
                 }
 
                 /**
-                 * FILTROS NORMALES
+                 * FILTROS NORMALES Y RELACIONALES
+                 * Ahora soporta sintaxis de punto: mascota.nombre
                  */
 
                 foreach (
@@ -60,35 +61,6 @@ class ExecuteAction
                         $query,
                         $field,
                         $value
-                    );
-                }
-
-                /**
-                 * FILTROS RELACIONALES
-                 */
-
-                foreach (
-                    ($data['relation_filters'] ?? [])
-                    as $relation => $filters
-                ) {
-
-                    $query->whereHas(
-                        $relation,
-                        function ($q)
-                        use ($filters) {
-
-                            foreach (
-                                $filters
-                                as $field => $value
-                            ) {
-
-                                $this->applyFilter(
-                                    $q,
-                                    $field,
-                                    $value
-                                );
-                            }
-                        }
                     );
                 }
 
@@ -140,7 +112,7 @@ class ExecuteAction
     }
 
     /**
-     * APLICAR FILTROS
+     * APLICAR FILTROS (MODIFICADO PARA SOPORTAR RELACIONES)
      */
 
     protected function applyFilter(
@@ -150,7 +122,36 @@ class ExecuteAction
     ): void {
 
         /**
-         * ARRAYS
+         * VERIFICAR SI ES FILTRO RELACIONAL (contiene punto)
+         * Ejemplo: mascota.nombre, user.name, etc.
+         */
+
+        if (str_contains($field, '.')) {
+            
+            $parts = explode('.', $field);
+            $relation = $parts[0];
+            $relationField = $parts[1];
+            
+            // Aplicar filtro a la relación
+            $query->whereHas($relation, function ($q) use ($relationField, $value) {
+                
+                if (is_array($value)) {
+                    $flatValues = $this->flattenArray($value);
+                    $q->where(function ($sub) use ($relationField, $flatValues) {
+                        foreach ($flatValues as $v) {
+                            $sub->orWhere($relationField, 'like', '%' . $v . '%');
+                        }
+                    });
+                } else {
+                    $q->where($relationField, 'like', '%' . $value . '%');
+                }
+            });
+            
+            return;
+        }
+
+        /**
+         * ARRAYS (filtros múltiples)
          */
 
         if (is_array($value)) {
@@ -179,7 +180,7 @@ class ExecuteAction
         }
 
         /**
-         * STRING NORMAL
+         * STRING NORMAL (campos directos)
          */
 
         $query->where(
