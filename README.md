@@ -1,58 +1,287 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🐾 PetLuApp Admin
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<div align="center">
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-12-red?style=for-the-badge&logo=laravel)
+![Filament](https://img.shields.io/badge/Filament-v3-orange?style=for-the-badge)
+![PHP](https://img.shields.io/badge/PHP-8.2+-blue?style=for-the-badge&logo=php)
+![Multi Tenant](https://img.shields.io/badge/SaaS-MultiTenant-success?style=for-the-badge)
+![AI Assistant](https://img.shields.io/badge/AI-Gemini%20%7C%20Ollama-purple?style=for-the-badge)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sistema SaaS para la gestión integral de clínicas veterinarias desarrollado con Laravel y Filament.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Incluye arquitectura Multi-Tenant, administración centralizada, paneles independientes para veterinarias y un asistente de inteligencia artificial capaz de consultar información del sistema mediante lenguaje natural.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+</div>
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# ✨ Características principales
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🏢 Arquitectura SaaS Multi-Tenant
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- Gestión de múltiples clínicas veterinarias desde una única plataforma.
+- Aislamiento de información por clínica.
+- Escalable para nuevos clientes.
+- Administración centralizada.
 
-## Agentic Development
+## 👨‍💼 Panel System
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Panel destinado a los Super Administradores del sistema.
 
-```bash
-composer require laravel/boost --dev
+Permite:
 
-php artisan boost:install
+- Gestión de clínicas veterinarias.
+- Administración de planes.
+- Control de usuarios.
+- Configuración global.
+- Monitoreo de tenants.
+- Gestión de permisos y roles.
+
+## 🏥 Panel Admin
+
+Panel destinado a administradores de clínicas veterinarias.
+
+Permite:
+
+- Gestión de mascotas.
+- Gestión de propietarios.
+- Gestión de citas.
+- Historial clínico.
+- Vacunación.
+- Recordatorios.
+- Inventario.
+- Reportes.
+- Gestión de usuarios internos.
+
+## 🤖 AI Copilot
+
+Asistente inteligente integrado.
+
+Características:
+
+- Consultas mediante lenguaje natural.
+- Acceso controlado a la información del tenant.
+- Respuestas contextuales.
+- Ahorro de tiempo en búsquedas y reportes.
+- Compatible con Gemini y Ollama.
+
+Ejemplos:
+
+```text
+¿Cuántas mascotas fueron registradas este mes?
+
+Muéstrame las citas pendientes para mañana.
+
+¿Cuáles son las vacunas más aplicadas este año?
+
+¿Cuántos propietarios nuevos se registraron esta semana?
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+# 🛠️ Tecnologías utilizadas
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Laravel
+- FilamentPHP
+- MySQL
+- Livewire
+- Alpine.js
+- Gemini AI
+- Ollama
+- Multi-Tenant Architecture
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 📋 Requisitos
 
-## Security Vulnerabilities
+- PHP 8.2+
+- Composer
+- MySQL 8+
+- Node.js 20+
+- NPM
+- Git
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+# 🚀 Instalación
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/usuario/repositorio.git
+```
+
+```bash
+cd repositorio
+```
+
+## 2. Instalar dependencias
+
+```bash
+composer install
+```
+
+```bash
+npm install
+```
+
+## 3. Crear archivo de entorno
+
+```bash
+cp .env.example .env
+```
+
+## 4. Generar clave
+
+```bash
+php artisan key:generate
+```
+
+## 5. Configurar base de datos
+
+Editar el archivo `.env`
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nombre_bd
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+## 6. Configuración IA
+
+### Gemini
+
+```env
+GEMINI_API_KEY=TU_API_KEY
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+### Ollama (Local)
+
+```env
+OLLAMA_URL=http://127.0.0.1:11434
+OLLAMA_MODEL=qwen2.5:3b
+```
+
+---
+
+## 7. Ejecutar migraciones
+
+```bash
+php artisan migrate
+```
+
+## 8. Compilar assets
+
+```bash
+npm run build
+```
+
+o para desarrollo
+
+```bash
+npm run dev
+```
+
+## 9. Iniciar servidor
+
+```bash
+php artisan serve
+```
+
+---
+
+# 🧠 Configuración de Ollama
+
+Instalar Ollama:
+
+https://ollama.com
+
+Descargar modelo:
+
+```bash
+ollama pull qwen2.5:3b
+```
+
+Verificar:
+
+```bash
+ollama list
+```
+
+Iniciar Ollama:
+
+```bash
+ollama serve
+```
+
+---
+
+# 🔐 Roles del sistema
+
+| Rol | Descripción |
+|-------|------------|
+| System Admin | Administrador global del SaaS |
+| Veterinary Admin | Administrador de la clínica |
+| Staff | Personal de la clínica |
+| Veterinarian | Médico veterinario |
+
+---
+
+# 📁 Estructura general
+
+```text
+app/
+├── Filament/
+│   ├── System/
+│   └── Admin/
+│
+├── Models/
+├── Services/
+├── AI/
+├── Tenancy/
+│
+database/
+resources/
+routes/
+```
+
+---
+
+# 📈 Beneficios del sistema
+
+- Gestión centralizada de múltiples clínicas.
+- Reducción de tiempos administrativos.
+- Consultas inteligentes mediante IA.
+- Escalabilidad SaaS.
+- Arquitectura moderna basada en Laravel y Filament.
+- Experiencia optimizada para personal veterinario.
+
+---
+
+# 🔮 Roadmap
+
+- [ ] Dashboard avanzado con métricas IA.
+- [ ] WhatsApp Business Integration.
+- [ ] Recordatorios automáticos.
+- [ ] Aplicación móvil.
+- [ ] Reportes predictivos.
+- [ ] IA para análisis clínico.
+
+---
+
+# 📄 Licencia
+
+Este proyecto se distribuye bajo la licencia MIT.
+
+---
+
+<div align="center">
+
+Desarrollado con ❤️ usando Laravel, Filament y AI.
+
+</div>
