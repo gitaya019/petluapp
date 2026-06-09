@@ -2,9 +2,9 @@
 
 <div align="center">
 
-![Laravel](https://img.shields.io/badge/Laravel-12-red?style=for-the-badge&logo=laravel)
-![Filament](https://img.shields.io/badge/Filament-v3-orange?style=for-the-badge)
-![PHP](https://img.shields.io/badge/PHP-8.2+-blue?style=for-the-badge&logo=php)
+![Laravel](https://img.shields.io/badge/Laravel-13-red?style=for-the-badge&logo=laravel)
+![Filament](https://img.shields.io/badge/Filament-v5-orange?style=for-the-badge)
+![PHP](https://img.shields.io/badge/PHP-8.3+-blue?style=for-the-badge&logo=php)
 ![Multi Tenant](https://img.shields.io/badge/SaaS-MultiTenant-success?style=for-the-badge)
 ![AI Assistant](https://img.shields.io/badge/AI-Gemini%20%7C%20Ollama-purple?style=for-the-badge)
 
