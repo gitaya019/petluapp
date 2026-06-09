@@ -226,29 +226,7 @@ ollama serve
 | Rol | Descripción |
 |-------|------------|
 | System Admin | Administrador global del SaaS |
-| Veterinary Admin | Administrador de la clínica |
-| Staff | Personal de la clínica |
-| Veterinarian | Médico veterinario |
-
----
-
-# 📁 Estructura general
-
-```text
-app/
-├── Filament/
-│   ├── System/
-│   └── Admin/
-│
-├── Models/
-├── Services/
-├── AI/
-├── Tenancy/
-│
-database/
-resources/
-routes/
-```
+| Rol panel admin | Los roles del panel admin son personalizables a gusto del cliente |
 
 ---
 
@@ -265,11 +243,8 @@ routes/
 
 # 🔮 Roadmap
 
-- [ ] Dashboard avanzado con métricas IA.
-- [ ] WhatsApp Business Integration.
-- [ ] Recordatorios automáticos.
-- [ ] Aplicación móvil.
-- [ ] Reportes predictivos.
+- [ ] Dashboard avanzado con métricas Kpis del sistema.
+- [ ] Recordatorios automáticos correo.
 - [ ] IA para análisis clínico.
 
 ---
